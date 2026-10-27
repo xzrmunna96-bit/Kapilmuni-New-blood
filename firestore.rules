@@ -1,0 +1,132 @@
+rules_version = '2';
+// Kapilmuni Online Blood - Firestore rules
+// Firebase Console -> Firestore Database -> Rules -> paste this whole file -> Publish.
+// ADMIN: the Firebase Auth account with the email below (create it first - see README step 3).
+// If you change the email, change ADMIN_EMAIL in admin.html as well.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    // ADMIN = the email/password account below. For the strongest lock, replace the whole line with:
+    //   function isAdmin() { return signedIn() && request.auth.uid == 'PASTE_ADMIN_UID_HERE'; }
+    // (Firebase Console -> Authentication -> Users -> copy the admin's "User UID".)
+    function isAdmin()  { return signedIn() && request.auth.token.email == 'admin@kapilmuni.app' && request.auth.token.firebase.sign_in_provider == 'password'; }
+    function own(uid)   { return signedIn() && request.auth.uid == uid; }
+
+    // ---------- members ----------
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create: if own(uid)
+        && request.resource.data.role in ['donor', 'receiver']
+        && !('blocked' in request.resource.data)
+        && !('verified' in request.resource.data)
+        && !('cardApproved' in request.resource.data)
+        && request.resource.data.get('donationCount', 0) == 0;
+      allow update: if isAdmin()
+        || (own(uid) && !request.resource.data.diff(resource.data).affectedKeys()
+              .hasAny(['blocked', 'verified', 'cardApproved', 'cardApprovedAt', 'donationCount', 'role']));
+      allow delete: if isAdmin();
+    }
+
+    // ---------- blood requests (urgent) ----------
+    match /requests/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if isAdmin() || (signedIn() && resource.data.createdBy == request.auth.uid);
+    }
+
+    // ---------- donations (written by admin only) ----------
+    match /donations/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---------- reports ----------
+    match /reports/{id} {
+      allow create: if signedIn();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ---------- public site content (admin edits, everyone reads) ----------
+    match /announcements/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /banners/{id}       { allow read: if true; allow write: if isAdmin(); }
+    match /popups/{id}        { allow read: if true; allow write: if isAdmin(); }
+    match /team/{id}          { allow read: if true; allow write: if isAdmin(); }
+    match /settings/{id}      { allow read: if true; allow write: if isAdmin(); }
+    match /stats/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+      // a newly registered member may add themselves to the public counters (+1 at a time, counters only)
+      allow update: if id == 'public' && signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['total', 'donors', 'receivers'])
+        && request.resource.data.get('total', 0)     - resource.data.get('total', 0)     in [0, 1]
+        && request.resource.data.get('donors', 0)    - resource.data.get('donors', 0)    in [0, 1]
+        && request.resource.data.get('receivers', 0) - resource.data.get('receivers', 0) in [0, 1];
+    }
+
+    // ---------- admin notifications (bell): to = 'all' or a member uid ----------
+    match /notifications/{id} {
+      allow read: if isAdmin() || (signedIn() && resource.data.to in [request.auth.uid, 'all']);
+      allow write: if isAdmin();
+    }
+
+    // ---------- ID card requests (document id = member uid) ----------
+    match /cardRequests/{uid} {
+      allow read: if isAdmin() || own(uid);
+      allow create: if own(uid) && request.resource.data.uid == uid && request.resource.data.status == 'pending';
+      allow update: if isAdmin()
+        || (own(uid) && request.resource.data.status == 'pending'
+              && resource.data.status in ['pending', 'rejected']);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- live support (member <-> admin) ----------
+    match /support/{uid} {
+      allow read: if isAdmin() || own(uid);
+      allow create: if own(uid) && request.resource.data.uid == uid;
+      allow update: if isAdmin() || own(uid);
+      allow delete: if isAdmin();
+      match /messages/{mid} {
+        allow read: if isAdmin() || own(uid);
+        allow create: if isAdmin() || (own(uid) && request.resource.data.from in ['user', 'bot', 'system']);
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // ---------- chat ----------
+    match /chats/{chatId} {
+      // resource == null lets a member open a chat that has no messages yet
+      allow read: if isAdmin() || (signedIn() && (resource == null || request.auth.uid in resource.data.participants));
+      allow create: if signedIn() && request.auth.uid in request.resource.data.participants;
+      allow update: if signedIn() && request.auth.uid in resource.data.participants
+                    && request.resource.data.participants == resource.data.participants;
+      allow delete: if isAdmin();
+
+      match /messages/{msgId} {
+        function isPart() {
+          return request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        }
+        allow read: if isAdmin() || (signedIn() && (!exists(/databases/$(database)/documents/chats/$(chatId)) || isPart()));
+        allow create: if signedIn() && isPart() && request.resource.data.from == request.auth.uid;
+        allow update: if signedIn() && isPart() && resource.data.from == request.auth.uid;
+        allow delete: if isAdmin() || (signedIn() && isPart());
+      }
+    }
+
+    // ---------- voice calls (WebRTC signalling) ----------
+    match /calls/{callId} {
+      allow create: if signedIn() && request.resource.data.caller == request.auth.uid;
+      allow read, update: if signedIn() && (resource.data.caller == request.auth.uid || resource.data.callee == request.auth.uid);
+      allow delete: if isAdmin();
+      match /candidates/{cid} {
+        allow read, create: if signedIn();
+      }
+    }
+
+    // maintenance mode lives in settings/maintenance (public read, admin write) - covered above
+
+    // everything else is blocked
+    match /{document=**} { allow read, write: if false; }
+  }
+}

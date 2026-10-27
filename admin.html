@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapilmuni Online Blood Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#4A0D12">
+    <link rel="icon" data-logo href="">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+window.LOGO_SRC="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20200%20200%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27g%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%271%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23FF5A52%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23A31515%27%2F%3E%3C%2FlinearGradient%3E%3ClinearGradient%20id%3D%27d%27%20x1%3D%270%27%20y1%3D%270%27%20x2%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23FFFFFF%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23FFD9D9%27%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%27100%27%20cy%3D%27100%27%20r%3D%27100%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Ccircle%20cx%3D%27100%27%20cy%3D%27100%27%20r%3D%2790%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.4%27%20stroke-width%3D%273%27%2F%3E%3Cpath%20d%3D%27M100%2026C100%2026%2050%2088%2050%20124a50%2050%200%200%200%20100%200C150%2088%20100%2026%20100%2026z%27%20fill%3D%27url%28%23d%29%27%2F%3E%3Cpath%20d%3D%27M62%20126h22l9-24%2015%2042%2011-28h19%27%20fill%3D%27none%27%20stroke%3D%27%23C62828%27%20stroke-width%3D%278%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3C%2Fsvg%3E";
+function logoFail(i){try{var p=i.parentNode;i.remove();var e=document.createElement('i');e.className='fa-solid fa-droplet';p.appendChild(e);p.classList.add('logo-missing');}catch(x){}}
+document.addEventListener('DOMContentLoaded',function(){var a=document.querySelectorAll('img[data-logo]');for(var i=0;i<a.length;i++)a[i].src=window.LOGO_SRC;var l=document.querySelectorAll('link[data-logo]');for(var j=0;j<l.length;j++)l[j].href=window.LOGO_SRC;});
+</script>
+    <style>
+        * { box-sizing:border-box; margin:0; padding:0; }
+        html, body { height:100%; }
+        body { font-family:'Plus Jakarta Sans','Hind Siliguri',system-ui,sans-serif; background:#FFF6F6; color:#5A1015; -webkit-tap-highlight-color:transparent; letter-spacing:-.005em; }
+        button { font-family:inherit; border:0; background:none; color:inherit; }
+        input, select { font-family:inherit; }
+        a { text-decoration:none; }
+        .hidden { display:none !important; }
+        .inline-block { display:inline-block; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        @keyframes fade { from { opacity:0; } to { opacity:1; } }
+        @keyframes rise { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+        .loader { border:3px solid #E3EAEE; border-top-color:#D32F2F; border-radius:50%; width:22px; height:22px; animation:spin 1s linear infinite; display:none; }
+        .loader.inline-block { display:inline-block; }
+        .ad-root { position:fixed; inset:0; display:flex; flex-direction:row; }
+        #toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#1E293B; color:#fff; padding:9px 16px; border-radius:8px; font-size:13px; box-shadow:0 8px 24px rgba(0,0,0,.2); opacity:0; transition:opacity .25s; z-index:200; pointer-events:none; }
+        #offline-banner { position:fixed; top:0; left:0; right:0; z-index:150; background:#1E293B; color:#fff; font-size:12px; text-align:center; padding:6px; transform:translateY(-100%); transition:transform .3s; }
+        #offline-banner.show { transform:none; }
+        :focus-visible { outline:2px solid #D32F2F; outline-offset:2px; }
+        /* splash + login */
+        #splash { position:fixed; inset:0; z-index:180; background:#C62828; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; color:#fff; transition:opacity .5s; }
+        #splash .lg { width:64px; height:64px; border-radius:16px; background:#fff; color:#C62828; display:grid; place-items:center; font-size:28px; }
+        #splash p { font-size:13px; opacity:.8; }
+        #login-page { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:20px; background:linear-gradient(180deg,#4A0D12 0,#4A0D12 38%,#FFF6F6 38%); }
+        .lg-card { width:min(400px,100%); background:#fff; border:1px solid #E3EAEE; border-radius:12px; padding:26px 24px 22px; box-shadow:0 20px 50px -20px rgba(11,37,48,.45); animation:rise .4s both; }
+        .lg-brand { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+        .lg-brand .ad-logo { width:40px; height:40px; font-size:18px; }
+        .lg-brand b { display:block; font-size:16px; font-weight:700; line-height:1.2; } .lg-brand span { font-size:12px; color:#6B7A86; }
+        .lg-card label { display:block; font-size:11px; font-weight:700; color:#6B7A86; margin:14px 0 5px; letter-spacing:.02em; }
+        .lg-card .ad-in { width:100%; padding:11px 12px; font-size:14px; }
+        .lg-err { margin-top:12px; font-size:12.5px; color:#B42318; background:#FDECEC; padding:9px 11px; border-radius:8px; }
+        .lg-btn { width:100%; margin-top:18px; padding:12px; border-radius:8px; background:#D32F2F; color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:9px; }
+        .lg-btn:hover { background:#C62828; } .lg-btn[disabled] { opacity:.65; pointer-events:none; }
+        .lg-foot { margin-top:16px; text-align:center; font-size:12px; color:#6B7A86; } .lg-foot a { color:#D32F2F; font-weight:600; }
+
+        #admin-panel { background:#FFF6F6; color:#5A1015; }
+        #admin-panel.flex { display:flex; }
+        #admin-panel button { cursor:pointer; }
+        .ad-side { width:236px; background:#4A0D12; display:flex; flex-direction:column; flex-shrink:0; height:100%; z-index:60; transition:transform .25s; }
+        .ad-brand { display:flex; align-items:center; gap:11px; padding:18px 18px 16px; border-bottom:1px solid rgba(255,255,255,.07); }
+        .ad-logo { width:34px; height:34px; border-radius:9px; background:#D32F2F; color:#fff; display:grid; place-items:center; font-size:15px; }
+        .ad-brand b { display:block; color:#fff; font-size:15px; font-weight:700; line-height:1.15; }
+        .ad-brand span { font-size:11px; color:#7F98A3; }
+        .ad-nav { flex:1; overflow-y:auto; padding:10px 10px; }
+        .ad-nav p { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#5F7A86; padding:14px 10px 6px; }
+        .ad-nav button { display:flex; align-items:center; gap:11px; width:100%; padding:9px 10px; border-radius:8px; font-size:13px; font-weight:600; color:#A8BDC6; text-align:left; margin-bottom:2px; transition:background .15s,color .15s; }
+        .ad-nav button i { width:16px; text-align:center; font-size:13px; }
+        .ad-nav button:hover { background:rgba(255,255,255,.06); color:#fff; }
+        .ad-nav button.on { background:#D32F2F; color:#fff; }
+        .ad-nav em { margin-left:auto; font-style:normal; font-size:10.5px; font-weight:700; background:#D64545; color:#fff; padding:1px 7px; border-radius:10px; }
+        .ad-side-foot { padding:12px; border-top:1px solid rgba(255,255,255,.07); }
+        .ad-me { display:flex; align-items:center; gap:10px; padding:4px 4px 10px; min-width:0; }
+        .ad-me div:last-child { min-width:0; }
+        .ad-me b { display:block; font-size:12.5px; color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ad-me span { display:block; font-size:10.5px; color:#7F98A3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ad-av { width:32px; height:32px; border-radius:8px; background:#164B5E; color:#fff; display:grid; place-items:center; font-weight:700; font-size:13px; flex-shrink:0; }
+        .ad-out { display:flex; align-items:center; gap:9px; width:100%; padding:8px 10px; border-radius:8px; font-size:12.5px; font-weight:600; color:#F0A3A3; transition:background .15s; }
+        .ad-out:hover { background:rgba(214,69,69,.15); }
+        .ad-main { flex:1; min-width:0; display:flex; flex-direction:column; height:100%; }
+        .ad-top { display:flex; align-items:center; gap:12px; height:60px; padding:0 22px; background:#fff; border-bottom:1px solid #E3EAEE; flex-shrink:0; }
+        .ad-crumb { flex:1; min-width:0; }
+        .ad-crumb h1 { font-size:16px; font-weight:700; color:#5A1015; line-height:1.2; }
+        .ad-crumb p { font-size:11.5px; color:#7A8591; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ad-burger { display:none; }
+        .ad-content { flex:1; overflow-y:auto; padding:20px 22px 40px; }
+        .ad-view { max-width:1180px; margin:0 auto; animation:fade .25s both; }
+        .ad-view.hidden { display:none; }
+        .ad-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 13px; border:1px solid #D5DEE4; background:#fff; color:#33475A; border-radius:8px; font-size:12.5px; font-weight:600; transition:background .15s,border-color .15s; white-space:nowrap; }
+        .ad-btn:hover { background:#F5F8FA; border-color:#C3CFD7; }
+        .ad-btn-p { background:#D32F2F; border-color:#D32F2F; color:#fff; } .ad-btn-p:hover { background:#C62828; border-color:#C62828; }
+        .ad-btn-d { background:#D64545; border-color:#D64545; color:#fff; } .ad-btn-d:hover { background:#C13838; border-color:#C13838; }
+        .ad-btn[disabled] { opacity:.6; pointer-events:none; }
+        .ad-ib { width:30px; height:30px; display:inline-grid; place-items:center; border-radius:7px; color:#5B6B78; font-size:12px; border:1px solid transparent; transition:background .15s,color .15s; }
+        .ad-ib:hover { background:#EAF2F5; color:#D32F2F; }
+        .ad-ib.dg:hover { background:#FDECEC; color:#C62828; } .ad-ib.ok:hover { background:#E3F5EA; color:#15803D; }
+        .ad-link { font-size:12px; font-weight:600; color:#D32F2F; } .ad-link:hover { text-decoration:underline; }
+        .ad-in { padding:8px 11px; border:1px solid #D5DEE4; border-radius:8px; font-size:12.5px; background:#fff; color:#5A1015; min-width:0; }
+        .ad-in:focus, .ad-search input:focus { outline:none; border-color:#D32F2F; box-shadow:0 0 0 3px rgba(14,116,144,.12); }
+        .ad-search { position:relative; flex:1; min-width:200px; }
+        .ad-search i { position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:12px; color:#8A97A3; }
+        .ad-search input { width:100%; padding:8px 11px 8px 32px; border:1px solid #D5DEE4; border-radius:8px; font-size:12.5px; background:#fff; }
+        .ad-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+        .ad-muted { font-size:12px; color:#7A8591; }
+        .ad-card { background:#fff; border:1px solid #E3EAEE; border-radius:10px; }
+        .ad-ch { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid #EDF2F5; }
+        .ad-ch h3 { font-size:13px; font-weight:700; color:#5A1015; } .ad-ch span { font-size:11.5px; color:#7A8591; }
+        .ad-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(168px,1fr)); gap:12px; margin-bottom:14px; }
+        .ad-kpi { background:#fff; border:1px solid #E3EAEE; border-radius:10px; padding:14px 15px; display:flex; gap:12px; align-items:center; }
+        .ad-kpi .ic { width:38px; height:38px; border-radius:9px; display:grid; place-items:center; font-size:15px; flex-shrink:0; }
+        .ad-kpi p { font-size:11.5px; color:#6B7A86; font-weight:500; }
+        .ad-kpi b { display:block; font-size:22px; font-weight:800; letter-spacing:-.02em; line-height:1.15; color:#5A1015; }
+        .ad-kpi small { font-size:10.5px; color:#8A97A3; }
+        .t-teal { background:#E3F2F6; color:#D32F2F; } .t-red { background:#FDECEC; color:#C62828; } .t-green { background:#E3F5EA; color:#15803D; } .t-amber { background:#FEF3DC; color:#B45309; } .t-purple { background:#EEEAFB; color:#6D4FD6; } .t-gray { background:#EEF1F4; color:#5B6672; }
+        .ad-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+        .ad-bars { padding:14px 16px 16px; display:grid; gap:9px; }
+        .ad-brow { display:grid; grid-template-columns:34px 1fr 54px; align-items:center; gap:10px; font-size:12px; }
+        .ad-brow b { font-weight:700; color:#C62828; }
+        .ad-track { height:8px; background:#EDF2F5; border-radius:4px; overflow:hidden; } .ad-track div { height:100%; background:#D32F2F; border-radius:4px; transition:width .6s; }
+        .ad-brow span { text-align:right; color:#5B6B78; font-weight:600; }
+        .ad-fu { padding:16px; } .ad-fu .big { font-size:30px; font-weight:800; letter-spacing:-.02em; } .ad-fu .big small { font-size:13px; font-weight:600; color:#7A8591; margin-left:6px; }
+        .ad-seg { display:flex; height:10px; border-radius:5px; overflow:hidden; background:#EDF2F5; margin:12px 0; } .ad-seg div { height:100%; }
+        .ad-legend { display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:#5B6B78; } .ad-legend i { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; }
+        .ad-list > div { display:flex; align-items:center; gap:11px; padding:10px 16px; border-bottom:1px solid #F0F4F6; } .ad-list > div:last-child { border-bottom:0; }
+        .ad-list .bx { width:34px; height:34px; border-radius:8px; background:#FDECEC; color:#C62828; font-weight:800; font-size:12px; display:grid; place-items:center; flex-shrink:0; }
+        .ad-list .tx { flex:1; min-width:0; } .ad-list .tx b { display:block; font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ad-list .tx span { font-size:11px; color:#7A8591; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ad-empty { padding:28px 16px; text-align:center; font-size:12.5px; color:#8A97A3; }
+        .ad-tcard { overflow:hidden; }
+        .ad-tw { overflow-x:auto; }
+        .ad-table { width:100%; border-collapse:collapse; min-width:760px; }
+        .ad-table th { text-align:left; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#7A8591; background:#F8FAFB; padding:10px 14px; border-bottom:1px solid #E3EAEE; white-space:nowrap; }
+        .ad-table td { padding:10px 14px; border-bottom:1px solid #F0F4F6; font-size:12.5px; vertical-align:middle; }
+        .ad-table tr:last-child td { border-bottom:0; } .ad-table tbody tr:hover { background:#FAFCFD; }
+        .ad-table .r { text-align:right; } .ad-table td.r { white-space:nowrap; }
+        .ad-who { display:flex; align-items:center; gap:10px; min-width:0; }
+        .ad-who .av { width:32px; height:32px; border-radius:8px; background:#E3F2F6; color:#D32F2F; font-weight:700; font-size:12px; display:grid; place-items:center; flex-shrink:0; text-transform:uppercase; }
+        .ad-who b { display:block; font-weight:600; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ad-who span { display:block; font-size:11px; color:#7A8591; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ad-pill { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:5px; white-space:nowrap; }
+        .ad-pill i { width:5px; height:5px; border-radius:50%; background:currentColor; }
+        .ad-bl { display:inline-block; font-size:11.5px; font-weight:800; color:#C62828; background:#FDECEC; padding:2px 8px; border-radius:5px; }
+        .ad-pager { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-top:1px solid #EDF2F5; font-size:12px; color:#6B7A86; } .ad-pager:empty { display:none; }
+        .ad-pager div { display:flex; gap:6px; }
+        .ad-load { padding:30px; text-align:center; } .ad-load.hidden { display:none; }
+        .ad-tabs { display:flex; gap:4px; background:#E8EFF2; padding:3px; border-radius:9px; }
+        .ad-tabs button { padding:6px 12px; border-radius:7px; font-size:12px; font-weight:600; color:#5B6B78; display:flex; gap:6px; align-items:center; }
+        .ad-tabs button em { font-style:normal; font-size:10.5px; color:#8A97A3; }
+        .ad-tabs button.on { background:#fff; color:#D32F2F; box-shadow:0 1px 2px rgba(15,42,53,.1); } .ad-tabs button.on em { color:#D32F2F; }
+        .ad-form3 { display:grid; grid-template-columns:1fr 1fr 1.3fr auto; gap:8px; }
+        .ad-team { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+        .ad-tm { background:#fff; border:1px solid #E3EAEE; border-radius:10px; padding:12px; display:flex; align-items:center; gap:11px; }
+        .ad-tm .im { width:42px; height:42px; border-radius:9px; background:#EEF3F6; overflow:hidden; display:grid; place-items:center; color:#9AA8B3; flex-shrink:0; } .ad-tm .im img { width:100%; height:100%; object-fit:cover; }
+        .ad-tm div.tx { flex:1; min-width:0; } .ad-tm b { display:block; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ad-tm span { font-size:11px; color:#D32F2F; font-weight:600; }
+        .ad-ov { position:fixed; inset:0; z-index:90; background:rgba(11,37,48,.55); display:flex; align-items:center; justify-content:center; padding:16px; } .ad-ov.hidden { display:none; }
+        .ad-md { background:#fff; border-radius:12px; width:min(440px,100%); max-height:90vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,.3); animation:rise .25s both; }
+        .ad-mh { padding:16px 18px 4px; } .ad-mh h3 { font-size:15px; font-weight:700; } .ad-mh p { font-size:12.5px; color:#6B7A86; margin-top:4px; line-height:1.5; }
+        .ad-mb { padding:10px 18px 4px; display:grid; gap:10px; }
+        .ad-mb label { display:block; font-size:11px; font-weight:700; color:#6B7A86; margin-bottom:4px; letter-spacing:.02em; } .ad-mb .ad-in { width:100%; padding:9px 11px; font-size:13px; }
+        .ad-mf { display:flex; justify-content:flex-end; gap:8px; padding:14px 18px 16px; }
+        .ad-note { font-size:11.5px; padding:8px 10px; border-radius:7px; background:#FFF6F6; color:#5B6B78; } .ad-note.ok { background:#E3F5EA; color:#15803D; } .ad-note.no { background:#FEF3DC; color:#B45309; }
+        .ad-chk { display:flex; align-items:center; gap:9px; font-size:13px; font-weight:600; } .ad-chk input { width:16px; height:16px; accent-color:#D32F2F; }
+        .ad-overlay { display:none; }
+        @media (max-width:860px) {
+            .ad-side { position:fixed; left:0; top:0; bottom:0; transform:translateX(-100%); }
+            .ad-side.open { transform:none; box-shadow:0 0 40px rgba(0,0,0,.4); }
+            .ad-overlay.open { display:block; position:fixed; inset:0; background:rgba(11,37,48,.5); z-index:55; }
+            .ad-burger { display:inline-grid; }
+            .ad-top { padding:0 14px; } .ad-content { padding:14px 12px 40px; }
+            .ad-grid2 { grid-template-columns:1fr; }
+            .ad-form3 { grid-template-columns:1fr; }
+            .ad-top-actions .ad-btn span { display:none; }
+        }
+        </style>
+<style id="v2">
+.brand-logo{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%;background:#fff}
+.logo-missing{display:grid!important;place-items:center;background:#D32F2F;color:#fff}
+#splash .lg.has-img{width:110px;height:110px;border-radius:50%;background:#fff;box-shadow:0 14px 40px rgba(0,0,0,.35),0 0 0 5px rgba(255,255,255,.2)}
+.ad-logo.logo-img{background:#fff;border-radius:50%;padding:0;flex-shrink:0}
+.lg-brand .ad-logo.logo-img{width:48px;height:48px}
+.lang-row{display:flex;justify-content:flex-end;margin-bottom:12px}
+.lang-sw{display:inline-flex;background:#E8EFF2;border-radius:9px;padding:2px;gap:2px}
+.lang-sw button{padding:6px 10px;border-radius:7px;font-size:11.5px;font-weight:700;color:#5B6B78;line-height:1;cursor:pointer}
+.lang-sw button.on{background:#D32F2F;color:#fff}
+.ad-who .av.av-p{padding:0;overflow:hidden;background:#E3EBEF;border-radius:50%}
+.ad-who .av.av-p img{width:100%;height:100%;object-fit:cover}
+.ad-mb label.ad-chk{display:flex;font-size:13px;color:#5A1015;margin:0}
+.ad-eu-av{display:flex;align-items:center;gap:14px}
+.ad-eu-av img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid #E3EAEE}
+.ad-week{display:flex;align-items:flex-end;justify-content:space-around;height:140px;padding:14px 14px 10px}
+.ad-week .wk{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;flex:1;height:100%}
+.ad-week .wk i{display:block;width:60%;max-width:30px;background:#D32F2F;border-radius:4px 4px 0 0}
+.ad-week .wk span{font-size:11px;font-weight:700}.ad-week .wk em{font-style:normal;font-size:10px;color:#7A8591}
+.ad-nform{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ad-nform textarea{resize:vertical;min-height:70px;font-family:inherit}
+.ad-nform .full{grid-column:1/-1}
+.ad-nt{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px}
+.ad-nt .tx{flex:1;min-width:0}.ad-nt b{display:block;font-size:13.5px}.ad-nt p{font-size:12px;color:#5B6B78;margin-top:2px;line-height:1.5}
+.ad-nt .bn{color:#D32F2F}.ad-nt small{font-size:10.5px;color:#8A97A3}
+@media(max-width:860px){.ad-nform{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+    <div id="offline-banner"><i class="fa-solid fa-wifi"></i> You are offline. Some features may not work.</div>
+
+    <div id="splash"><div class="lg has-img"><img data-logo class="brand-logo" alt="" onerror="logoFail(this)"></div><b>Kapilmuni Online Blood Admin</b><p>Loading console...</p></div>
+
+    <!-- LOGIN -->
+    <div id="login-page" class="hidden">
+        <div class="lg-card">
+            <div class="lang-row"><div class="lang-sw" role="group" aria-label="Language"><button type="button" data-lang="en" onclick="setLang('en')">EN</button><button type="button" data-lang="bn" onclick="setLang('bn')">বাংলা</button></div></div>
+            <div class="lg-brand"><div class="ad-logo logo-img"><img data-logo class="brand-logo" alt="" onerror="logoFail(this)"></div><div><b>Kapilmuni Online Blood Admin</b><span>Enter the password to continue</span></div></div>
+            <label for="lg-pass">Password</label>
+            <input id="lg-pass" type="password" class="ad-in" autocomplete="off" inputmode="numeric" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()">
+            <div id="lg-err" class="lg-err hidden"></div>
+            <button id="lg-btn" class="lg-btn" onclick="adminLogin()"><span>Open dashboard</span></button>
+            <p class="lg-foot">Looking for the donor app? <a href="index.html">Open Kapilmuni Online Blood</a></p>
+        </div>
+    </div>
+
+        <div id="admin-panel" class="ad-root hidden">
+            <div id="ad-overlay" class="ad-overlay" onclick="toggleMobileMenu()"></div>
+
+            <!-- SIDEBAR -->
+            <aside id="adm-sidebar" class="ad-side">
+                <div class="ad-brand">
+                    <div class="ad-logo logo-img"><img data-logo class="brand-logo" alt="" onerror="logoFail(this)"></div>
+                    <div><b>Kapilmuni Blood</b><span>Admin console</span></div>
+                </div>
+                <nav class="ad-nav">
+                    <p>Overview</p>
+                    <button onclick="adminNav('dash')" id="nav-dash" class="on"><i class="fa-solid fa-chart-pie"></i>Dashboard</button>
+                    <p>Notices</p>
+                    <button onclick="adminNav('nbar')" id="nav-nbar"><i class="fa-solid fa-bullhorn"></i>Notice bar</button>
+                    <button onclick="adminNav('nall')" id="nav-nall"><i class="fa-solid fa-bell"></i>Send notification</button>
+                    <p>Home page</p>
+                    <button onclick="adminNav('banners')" id="nav-banners"><i class="fa-solid fa-images"></i>Slider banners</button>
+                    <button onclick="adminNav('team')" id="nav-team"><i class="fa-solid fa-user-shield"></i>Community</button>
+                    <p>Blood</p>
+                    <button onclick="adminNav('reqs')" id="nav-reqs"><i class="fa-solid fa-droplet"></i>Urgent requests<em id="nav-reqs-count" class="hidden">0</em></button>
+                    <button onclick="adminNav('dons')" id="nav-dons"><i class="fa-solid fa-hand-holding-droplet"></i>Donations</button>
+                    <p>People</p>
+                    <button onclick="adminNav('users')" id="nav-users"><i class="fa-solid fa-users"></i>Members</button>
+                    <button onclick="adminNav('cardreq')" id="nav-cardreq"><i class="fa-solid fa-id-card"></i>ID card requests<em id="nav-cardreq-count" class="hidden">0</em></button>
+                    <button onclick="adminNav('support')" id="nav-support"><i class="fa-solid fa-headset"></i>Live support<em id="nav-support-count" class="hidden">0</em></button>
+                    <button onclick="adminNav('reports')" id="nav-reports"><i class="fa-solid fa-flag"></i>Reports<em id="nav-reports-count" class="hidden">0</em></button>
+                    <p>System</p>
+                    <button onclick="adminNav('maint')" id="nav-maint"><i class="fa-solid fa-screwdriver-wrench"></i>Maintenance mode</button>
+                    <button onclick="adminNav('site')" id="nav-site"><i class="fa-solid fa-gear"></i>Site settings</button>
+                    <button onclick="adminNav('live')" id="nav-live"><i class="fa-solid fa-tower-broadcast"></i>Live activity</button>
+                    <button onclick="adminNav('chats')" id="nav-chats"><i class="fa-solid fa-comments"></i>Chats &amp; Online</button>
+                </nav>
+                <div class="ad-side-foot">
+                    <div class="ad-me">
+                        <div class="ad-av" id="ad-me-av">A</div>
+                        <div><b id="ad-me-name">Admin</b><span id="ad-me-mail"></span></div>
+                    </div>
+                    <button onclick="handleLogout()" class="ad-out"><i class="fa-solid fa-arrow-right-from-bracket"></i>Log out</button>
+                </div>
+            </aside>
+
+            <!-- MAIN -->
+            <div class="ad-main">
+                <header class="ad-top">
+                    <button class="ad-ib ad-burger" onclick="toggleMobileMenu()" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+                    <div class="ad-crumb"><h1 id="ad-title">Overview</h1><p id="ad-sub">Platform summary and recent activity</p></div>
+                    <div class="ad-top-actions" style="display:flex;gap:8px;align-items:center"><div class="lang-sw" role="group" aria-label="Language"><button type="button" data-lang="en" onclick="setLang('en')">EN</button><button type="button" data-lang="bn" onclick="setLang('bn')">বাংলা</button></div>
+                        <button class="ad-btn" onclick="admRefresh()"><i class="fa-solid fa-rotate" id="ad-refresh-ic"></i><span>Refresh</span></button>
+                    </div>
+                </header>
+
+                <main class="ad-content">
+
+                    <!-- OVERVIEW -->
+                    <section id="view-dash" class="ad-view">
+                        <div class="ad-kpis" id="ad-kpis"></div>
+                        <div class="ad-grid2">
+                            <div class="ad-card">
+                                <div class="ad-ch"><h3>Donors by blood group</h3><span id="ad-bg-note"></span></div>
+                                <div id="ad-bg-bars" class="ad-bars"></div>
+                            </div>
+                            <div class="ad-card">
+                                <div class="ad-ch"><h3>Request fulfilment</h3></div>
+                                <div id="ad-fulfil"></div>
+                            </div>
+                        </div>
+                        <div class="ad-grid2">
+                            <div class="ad-card">
+                                <div class="ad-ch"><h3>Latest requests</h3><button class="ad-link" onclick="adminNav('reqs')">View all</button></div>
+                                <div id="ad-recent-reqs" class="ad-list"></div>
+                            </div>
+                            <div class="ad-card">
+                                <div class="ad-ch"><h3>New members</h3><button class="ad-link" onclick="adminNav('users')">View all</button></div>
+                                <div id="ad-recent-users" class="ad-list"></div>
+                            </div>
+                        </div>
+                        <div class="ad-grid2">
+                            <div class="ad-card"><div class="ad-ch"><h3>Top districts by requests</h3></div><div id="ad-top-dist" class="ad-bars"></div></div>
+                            <div class="ad-card"><div class="ad-ch"><h3>Requests in last 7 days</h3></div><div id="ad-week"></div></div>
+                        </div>
+                    </section>
+
+                    <!-- MEMBERS -->
+                    <section id="view-users" class="ad-view hidden">
+<div id="kxa-ustats"></div>
+                        <div class="ad-bar">
+                            <div class="ad-search"><i class="fa-solid fa-magnifying-glass"></i><input id="u-q" type="text" placeholder="Search name, email, phone or district" oninput="admUsersFilter()"></div>
+                            <select id="u-role" class="ad-in" onchange="admUsersFilter()"><option value="">All roles</option><option value="donor">Donor</option><option value="receiver">Receiver</option><option value="admin">Admin</option></select>
+                            <select id="u-blood" class="ad-in" onchange="admUsersFilter()"><option value="">All groups</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+                            <select id="u-avail" class="ad-in" onchange="admUsersFilter()"><option value="">Any status</option><option value="1">Available</option><option value="0">Unavailable</option></select>
+                            <button class="ad-btn" onclick="admExport('users')"><i class="fa-solid fa-file-arrow-down"></i><span>Export CSV</span></button>
+                        </div>
+                        <div class="ad-card ad-tcard">
+                            <div class="ad-tw"><table class="ad-table">
+                                <thead><tr><th>Member</th><th>Blood</th><th>Role</th><th>District</th><th>Status</th><th>Donations</th><th>Joined</th><th class="r">Actions</th></tr></thead>
+                                <tbody id="users-table-body"></tbody>
+                            </table></div>
+                            <div id="users-loader" class="ad-load hidden"><div class="loader inline-block"></div></div>
+                            <div class="ad-pager" id="u-pager"></div>
+                        </div>
+                    </section>
+
+                    <!-- REQUESTS -->
+                    <section id="view-reqs" class="ad-view hidden">
+                        <div class="ad-bar">
+                            <div class="ad-tabs" id="r-tabs"></div>
+                            <div class="ad-search"><i class="fa-solid fa-magnifying-glass"></i><input id="r-q" type="text" placeholder="Search patient, hospital, phone or location" oninput="admReqsFilter()"></div>
+                            <button class="ad-btn" onclick="admExport('reqs')"><i class="fa-solid fa-file-arrow-down"></i><span>Export CSV</span></button>
+                        </div>
+                        <div class="ad-card ad-tcard">
+                            <div class="ad-tw"><table class="ad-table">
+                                <thead><tr><th>Patient</th><th>Blood</th><th>Hospital / location</th><th>Contact</th><th>Needed by</th><th>Status</th><th>Posted</th><th class="r">Actions</th></tr></thead>
+                                <tbody id="reqs-body"></tbody>
+                            </table></div>
+                            <div id="reqs-loader" class="ad-load hidden"><div class="loader inline-block"></div></div>
+                            <div class="ad-pager" id="r-pager"></div>
+                        </div>
+                    </section>
+
+                    <!-- DONATIONS -->
+                    <section id="view-dons" class="ad-view hidden">
+                        <div class="ad-bar">
+                            <div class="ad-search"><i class="fa-solid fa-magnifying-glass"></i><input id="d-q" type="text" placeholder="Search donor or patient" oninput="admDonsFilter()"></div>
+                            <span class="ad-muted" id="d-total"></span>
+                            <button class="ad-btn" onclick="admExport('dons')"><i class="fa-solid fa-file-arrow-down"></i><span>Export CSV</span></button>
+                        </div>
+                        <div class="ad-card ad-tcard">
+                            <div class="ad-tw"><table class="ad-table">
+                                <thead><tr><th>Date</th><th>Donor</th><th>Blood</th><th>Patient helped</th><th>Status</th></tr></thead>
+                                <tbody id="dons-body"></tbody>
+                            </table></div>
+                            <div id="dons-loader" class="ad-load hidden"><div class="loader inline-block"></div></div>
+                            <div class="ad-pager" id="d-pager"></div>
+                        </div>
+                    </section>
+
+                    <!-- REPORTS -->
+                    <section id="view-reports" class="ad-view hidden">
+                        <div class="ad-bar">
+                            <div class="ad-tabs" id="rep-tabs"></div>
+                            <span class="ad-muted">Reports are sent by users from request and donor pages.</span>
+                        </div>
+                        <div class="ad-card ad-tcard">
+                            <div class="ad-tw"><table class="ad-table">
+                                <thead><tr><th>Type</th><th>Reported item</th><th>Reason</th><th>Reported by</th><th>Date</th><th>Status</th><th class="r">Actions</th></tr></thead>
+                                <tbody id="rep-body"></tbody>
+                            </table></div>
+                            <div id="reports-loader" class="ad-load hidden"><div class="loader inline-block"></div></div>
+                        </div>
+                    </section>
+
+                    <!-- NOTICES -->
+                    <section id="view-notices" class="ad-view hidden">
+                        <div class="ad-card" style="padding:16px;margin-bottom:16px">
+                            <div class="ad-ch" style="padding:0;border:0;margin-bottom:12px"><h3>Publish notice</h3></div>
+                            <div class="ad-nform">
+                                <input type="text" id="nt-title" placeholder="Title (English)" class="ad-in">
+                                <input type="text" id="nt-title-bn" placeholder="Title (Bangla, optional)" class="ad-in">
+                                <textarea id="nt-body" placeholder="Message (English)" class="ad-in"></textarea>
+                                <textarea id="nt-body-bn" placeholder="Message (Bangla, optional)" class="ad-in"></textarea>
+                                <div class="full"><label class="ad-chk"><input type="checkbox" id="nt-emer"> <b style="color:#C62828">Emergency notice</b> (red bar + pop-up with sound for every user)</label></div>
+                                <div class="full"><button onclick="adminAddNotice()" class="ad-btn ad-btn-p"><i class="fa-solid fa-bullhorn"></i><span>Publish</span></button></div>
+                            </div>
+                        </div>
+                        <div id="notice-list"></div>
+                    </section>
+
+                    <!-- TEAM -->
+                    <section id="view-site" class="ad-view hidden">
+<div class="kxa kxmap"><h3><i class="fa-solid fa-map-location-dot"></i> Where does each setting show?</h3>
+<p>Every card below tells you exactly <b>where on the website/app it appears</b>. Change it here and it updates for everyone instantly.</p>
+<div class="kxmap-g"><div><i class="fa-solid fa-image"></i><b>Website logo</b><span>Header · login · landing · ID card · app icon</span></div><div><i class="fa-solid fa-headset"></i><b>Support appearance</b><span>Top of the Live Support chat</span></div><div><i class="fa-solid fa-hand-sparkles"></i><b>Welcome pop-up</b><span>Right after a member logs in</span></div><div><i class="fa-solid fa-signature"></i><b>Name &amp; address</b><span>Header title · ID card · QR code</span></div></div></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-image"></i> 1 · Website logo</h3>
+<div class="kxw"><b>Shows in:</b><span>Home header (top-left)</span><span>Login page</span><span>Landing page</span><span>Splash screen</span><span>Donor ID card</span><span>Call screen</span><span>Browser tab / app icon</span></div>
+<p>The default is a blood-drop logo. Upload your own square logo (PNG with a clear background looks best). Do not use a photo of a person.</p>
+<div class="kxlg"><div class="kxlg-p"><img id="ks-prev" alt="" style="display:block"></div><div style="flex:1;min-width:200px"><input id="ks-logo" type="file" accept="image/*" class="ad-in" style="margin:0 0 8px" onchange="kxLogoPick(this,'ks-prev')"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="kxb" onclick="kxSaveLogo('logo','ks-logo')">Save logo</button><button class="kxb" style="background:#777" onclick="kxRemoveLogo('logo')">Remove · use default blood-drop logo</button></div></div></div></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-signature"></i> 2 · Website name &amp; address</h3>
+<div class="kxw"><b>Shows in:</b><span>Home header title</span><span>Login &amp; landing page</span><span>Donor ID card</span><span>QR verification link</span></div>
+<label>Website name</label><input id="ks-name" class="ad-in" placeholder="Kapilmuni Online Blood">
+<label>Website address (used in the card &amp; QR code)</label><input id="ks-dom" class="ad-in" placeholder="www.yoursite.com">
+<button class="kxb" onclick="kxSaveName()">Save name &amp; address</button></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-headset"></i> 3 · Live Support appearance</h3>
+<div class="kxw"><b>Shows in:</b><span>Top of the Live Support chat window on members' phones</span></div>
+<p>Give your support team a friendly face: a logo or a customer-service photo, a name and a short line. If you leave the picture empty, the website logo is used.</p>
+<div class="kxlg"><div class="kxlg-p round"><img id="ss-prev" alt="" style="display:block"></div><div style="flex:1;min-width:200px"><input id="ss-file" type="file" accept="image/*" class="ad-in" style="margin:0 0 8px" onchange="kxLogoPick(this,'ss-prev')"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="kxb" onclick="kxSaveLogo('supportLogo','ss-file')">Save picture</button><button class="kxb" style="background:#777" onclick="kxRemoveLogo('supportLogo')">Remove · use website logo</button></div></div></div>
+<label>Support name</label><input id="ss-name" class="ad-in" maxlength="40" placeholder="Kapilmuni Support">
+<label>Short line (shown under the header)</label><input id="ss-tag" class="ad-in" maxlength="70" placeholder="We are here to help you">
+<button class="kxb" onclick="kxSaveSupport()">Save support text</button></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-hand-sparkles"></i> 4 · Welcome pop-up</h3>
+<div class="kxw"><b>Shows in:</b><span>Website and app · once, right after a member logs in</span></div>
+<label class="ad-chk" style="margin:6px 0 10px"><input type="checkbox" id="ws-on" checked> <span>Show the welcome pop-up</span></label>
+<label>Title (leave empty for "Welcome, member name!")</label><input id="ws-t" class="ad-in" maxlength="80" placeholder="Welcome!">
+<label>Message (leave empty to use the default text)</label><textarea id="ws-b" class="ad-in" rows="3" maxlength="400"></textarea>
+<label>Bangla title (optional)</label><input id="ws-tb" class="ad-in" maxlength="80" placeholder="স্বাগতম!">
+<label>Bangla message (optional)</label><textarea id="ws-bb" class="ad-in" rows="3" maxlength="400"></textarea>
+<button class="kxb" onclick="kxSaveWelcome()">Save welcome pop-up</button></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-window-restore"></i> 5 · Entry pop-ups (image or notice)</h3>
+<div class="kxw"><b>Shows in:</b><span>Home page · shown one by one when a member opens the app</span></div>
+<p>Up to 3. Members close them with ×. Good for offers, camps or announcements with a picture.</p><textarea id="kp-text" class="ad-in" placeholder="Message (optional)"></textarea><input id="kp-file" type="file" accept="image/*" class="ad-in"><button class="kxb" onclick="kxAddPop()">Add pop-up</button><div id="kp-list"></div></div>
+
+<div class="kxa"><h3><i class="fa-solid fa-id-card"></i> 6 · ID card signatures</h3>
+<div class="kxw"><b>Shows in:</b><span>Back side of every donor ID card</span></div>
+<label>President name (English)</label><input id="kc-name" class="ad-in" value="Nahidul Hasan Munna"><label>President signature image</label><input id="kc-sig" type="file" accept="image/*" class="ad-in"><label>Secretary name (optional)</label><input id="kc-sec" class="ad-in" placeholder="Secretary name"><label>Secretary signature image</label><input id="kc-ssig" type="file" accept="image/*" class="ad-in"><button class="kxb" onclick="kxSaveCard()">Save signatures</button></div>
+</section>
+<section id="view-live" class="ad-view hidden"><div class="kxa"><h3>Newest members <span class="kxl">LIVE</span></h3><div id="lv-u"></div></div><div class="kxa"><h3>Latest blood requests <span class="kxl">LIVE</span></h3><div id="lv-r"></div></div><div class="kxa"><h3>Recent donations <span class="kxl">LIVE</span></h3><div id="lv-d"></div></div></section>
+<section id="view-chats" class="ad-view hidden"><div class="kxa"><h3>Online now <span class="kxl" id="on-n">0</span></h3><p>Members active in the app right now (updates live).</p><div id="on-list"></div></div><div class="kxa"><h3>Conversations <span class="kxl">LIVE</span></h3><p>Tap a conversation to read it. You can delete messages or the whole chat.</p><div id="ch-list"></div><div id="ch-view"></div></div></section>
+                    <section id="view-team" class="ad-view hidden">
+                        <p style="font-size:13px;color:#777;margin-bottom:10px">Add people shown in the app's <b>Our Team</b> list. Members can tap a photo to see it full size.</p>
+<div class="kxa"><h3>Community members</h3><input id="km-name" class="ad-in" placeholder="Name"><input id="km-role" class="ad-in" placeholder="Designation (e.g. President, Volunteer)"><label>Photo (choose from gallery)</label><input id="km-img" type="file" accept="image/*" class="ad-in"><label>Signature (optional)</label><input id="km-sig" type="file" accept="image/*" class="ad-in"><button class="kxb" onclick="kxAddMem()">Add member</button><div id="km-list"></div></div>
+
+                        <div class="ad-team" id="admin-team-grid" style="display:none"></div>
+                        <div id="team-loader" class="ad-load hidden"><div class="loader inline-block"></div></div>
+                    </section>
+                <section id="view-nbar" class="ad-view hidden"><div class="kxa">
+<h3><i class="fa-solid fa-bullhorn"></i> Notice bar text</h3>
+<p>This is the <b>moving red line</b> on every member's Home page (just under the top header, the one that says "Assalamu alaikum..."). Type your message in the box and press <b>Save</b>. It changes for everyone instantly.</p>
+<label>Message (English)</label><textarea id="nbx-t" class="ad-in" rows="2" maxlength="300" placeholder="Type the notice bar message here" oninput="kxNbPv()"></textarea>
+<label>Message (Bangla – optional, shown to members who use Bangla)</label><textarea id="nbx-b" class="ad-in" rows="2" maxlength="300" placeholder="এখানে বাংলা মেসেজ লিখুন" oninput="kxNbPv()"></textarea>
+<div class="kxpv"><small>Live preview</small><div class="kxmq"><i class="fa-solid fa-bullhorn"></i><span id="nbx-pv">—</span></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="kxb" onclick="kxNbSave()"><i class="fa-solid fa-floppy-disk"></i> Save</button><button class="kxb" style="background:#777" onclick="kxNbClear()">Clear message</button><small id="nbx-st" style="color:#777"></small></div>
+</div></section>
+<section id="view-nall" class="ad-view hidden">
+<div class="kxa"><h3><i class="fa-solid fa-pen"></i> Step 1 · Write the notification</h3>
+<p>Members see this when they tap the <b>🔔 bell</b> at the top of their Home page. Write it once, then choose who gets it in Step 2.</p>
+<label>Title</label><input id="nx-t" class="ad-in" maxlength="120" placeholder="Title (English)">
+<label>Message</label><textarea id="nx-b" class="ad-in" rows="3" maxlength="800" placeholder="Message (English)"></textarea>
+<details style="margin:2px 0 8px"><summary style="cursor:pointer;font-size:13px;font-weight:700;color:#B71C1C">Add Bangla version (optional)</summary><input id="nx-tb" class="ad-in" style="margin-top:8px" maxlength="120" placeholder="শিরোনাম (বাংলা)"><textarea id="nx-bb" class="ad-in" rows="3" maxlength="800" placeholder="বার্তা (বাংলা)"></textarea></details>
+<label class="ad-chk"><input type="checkbox" id="nx-pop"> <span><b style="color:#C62828">Also show a pop-up with sound</b> on their screen (use for urgent messages only)</span></label>
+</div>
+<div class="kxa"><h3><i class="fa-solid fa-user-check"></i> Step 2 · Choose who gets it</h3>
+<p>Press <b>Send</b> next to a name to send only to that member. Or tick several members (or <b>Select all</b>) and press the big button.</p>
+<div class="nxbar"><input id="nx-q" class="ad-in" placeholder="Search name, phone, blood group or district" oninput="kxNxPaint()"><label class="ad-chk"><input type="checkbox" id="nx-all" onchange="kxNxAll(this.checked)"> Select all</label></div>
+<div class="nxact"><button class="kxb" id="nx-sel" onclick="kxNxSend('selected')"><i class="fa-solid fa-paper-plane"></i> Send to selected (<span id="nx-n">0</span>)</button><button class="kxb" style="background:#16a34a" onclick="kxNxSend('all')"><i class="fa-solid fa-bullhorn"></i> Send to ALL members</button></div>
+<div id="nx-list" class="nxlist"></div></div>
+<div class="kxa"><h3><i class="fa-solid fa-clock-rotate-left"></i> Sent notifications</h3><p>Delete a notification here to remove it from members' bell page.</p><div id="nx-hist"></div></div>
+</section>
+<section id="view-banners" class="ad-view hidden"><div class="kxa"><h3>Slider banners (up to 6, they slide automatically)</h3><p>Shown at the top of the user home page.</p><input id="kb-link" class="ad-in" placeholder="Link when tapped (optional)"><label style="font-size:12px;font-weight:700">Option 1: pick an image from your gallery</label><input id="kb-file" type="file" accept="image/*" class="ad-in"><label style="font-size:12px;font-weight:700">Option 2: or paste an image link (https://...)</label><input id="kb-url" class="ad-in" placeholder="https://example.com/banner.jpg"><button class="kxb" onclick="kxAddBan()">Add banner</button><div id="kb-list"></div></div>
+</section>
+<section id="view-cardreq" class="ad-view hidden"><div class="kxa" style="margin-bottom:12px"><h3>Donor ID card requests</h3><p>Members with fewer than 2 donations can ask you to unlock their card. Check the details, then approve (the card opens for them instantly) or reject with a reason.</p></div><div id="cr-tabs"></div><div id="cr-list"></div></section>
+<section id="view-support" class="ad-view hidden"><div class="spw"><div class="spl"><input id="sp-q" placeholder="Search name, phone or email" oninput="kxspSearch()"><div id="sp-list"></div></div><div class="spc" id="sp-chat"><div class="sp-empty">Select a conversation</div></div></div></section>
+<section id="view-maint" class="ad-view hidden"><div class="kxa"><h3>Maintenance mode <span id="mt-state"></span></h3><p>While ON, every member sees a full-screen update notice with your picture and message, and cannot use any feature. Turn it OFF when you finish.</p>
+<label>Notice bar text (why the site is being updated)</label><input id="mt-title" class="ad-in" placeholder="e.g. We are adding new features - back at 10 PM">
+<label>Message</label><textarea id="mt-msg" rows="3" class="ad-in" placeholder="Details shown under the picture"></textarea>
+<label style="font-size:12px;font-weight:700">Option 1: pick a picture from your gallery</label><input id="mt-file" type="file" accept="image/*" class="ad-in" onchange="kxmtFile(this)">
+<label style="font-size:12px;font-weight:700">Option 2: paste a picture link (https://...)</label><input id="mt-url" class="ad-in" placeholder="https://example.com/update.jpg" oninput="kxmtUrl(this.value)">
+<div id="mt-prev" style="margin:8px 0"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="kxb" onclick="kxmtSave(true)">Turn ON maintenance</button><button class="kxb" style="background:#16a34a" onclick="kxmtOff()">Turn OFF</button></div></div></section>
+</main>
+            </div>
+
+            <!-- Modal host -->
+            <div id="ad-modal" class="ad-ov hidden" onclick="if(event.target===this)admCloseModal()"><div class="ad-md" id="ad-modal-box"></div></div>
+        </div>
+
+
+    <div id="toast"></div>
+
+    <script>
+(function(){
+var KEY='kob_lang',LANG='en';
+try{if(localStorage.getItem(KEY)==='bn')LANG='bn';}catch(e){}
+var BN={"Dhaka Division": "ঢাকা বিভাগ", "Chattogram Division": "চট্টগ্রাম বিভাগ", "Rajshahi Division": "রাজশাহী বিভাগ", "Khulna Division": "খুলনা বিভাগ", "Barishal Division": "বরিশাল বিভাগ", "Sylhet Division": "সিলেট বিভাগ", "Rangpur Division": "রংপুর বিভাগ", "Mymensingh Division": "ময়মনসিংহ বিভাগ", "Dhaka": "ঢাকা", "Faridpur": "ফরিদপুর", "Gazipur": "গাজীপুর", "Gopalganj": "গোপালগঞ্জ", "Kishoreganj": "কিশোরগঞ্জ", "Madaripur": "মাদারীপুর", "Manikganj": "মানিকগঞ্জ", "Munshiganj": "মুন্সীগঞ্জ", "Narayanganj": "নারায়ণগঞ্জ", "Narsingdi": "নরসিংদী", "Rajbari": "রাজবাড়ী", "Shariatpur": "শরীয়তপুর", "Tangail": "টাঙ্গাইল", "Bandarban": "বান্দরবান", "Brahmanbaria": "ব্রাহ্মণবাড়িয়া", "Chandpur": "চাঁদপুর", "Chattogram": "চট্টগ্রাম", "Comilla": "কুমিল্লা", "Cox's Bazar": "কক্সবাজার", "Feni": "ফেনী", "Khagrachhari": "খাগড়াছড়ি", "Lakshmipur": "লক্ষ্মীপুর", "Noakhali": "নোয়াখালী", "Rangamati": "রাঙ্গামাটি", "Bogura": "বগুড়া", "Chapainawabganj": "চাঁপাইনবাবগঞ্জ", "Joypurhat": "জয়পুরহাট", "Naogaon": "নওগাঁ", "Natore": "নাটোর", "Pabna": "পাবনা", "Rajshahi": "রাজশাহী", "Sirajganj": "সিরাজগঞ্জ", "Bagerhat": "বাগেরহাট", "Chuadanga": "চুয়াডাঙ্গা", "Jashore": "যশোর", "Jhenaidah": "ঝিনাইদহ", "Khulna": "খুলনা", "Kushtia": "কুষ্টিয়া", "Magura": "মাগুরা", "Meherpur": "মেহেরপুর", "Narail": "নড়াইল", "Satkhira": "সাতক্ষীরা", "Barguna": "বরগুনা", "Barishal": "বরিশাল", "Bhola": "ভোলা", "Jhalokati": "ঝালকাঠি", "Patuakhali": "পটুয়াখালী", "Pirojpur": "পিরোজপুর", "Habiganj": "হবিগঞ্জ", "Moulvibazar": "মৌলভীবাজার", "Sunamganj": "সুনামগঞ্জ", "Sylhet": "সিলেট", "Dinajpur": "দিনাজপুর", "Gaibandha": "গাইবান্ধা", "Kurigram": "কুড়িগ্রাম", "Lalmonirhat": "লালমনিরহাট", "Nilphamari": "নীলফামারী", "Panchagarh": "পঞ্চগড়", "Rangpur": "রংপুর", "Thakurgaon": "ঠাকুরগাঁও", "Jamalpur": "জামালপুর", "Mymensingh": "ময়মনসিংহ", "Netrokona": "নেত্রকোনা", "Sherpur": "শেরপুর", "Loading console...": "কনসোল লোড হচ্ছে...", "Kapilmuni Online Blood Admin": "কপিলমুনি অনলাইন ব্লাড অ্যাডমিন", "Enter the password to continue": "চালিয়ে যেতে পাসওয়ার্ড দিন", "Password": "পাসওয়ার্ড", "Enter admin password": "অ্যাডমিন পাসওয়ার্ড দিন", "Open dashboard": "ড্যাশবোর্ড খুলুন", "Looking for the donor app?": "ডোনার অ্যাপ খুঁজছেন?", "Open Kapilmuni Online Blood": "কপিলমুনি অনলাইন ব্লাড খুলুন", "Enter the password.": "পাসওয়ার্ড দিন।", "Incorrect password.": "পাসওয়ার্ড ভুল।", "You are offline. Some features may not work.": "আপনি অফলাইনে আছেন। কিছু ফিচার কাজ নাও করতে পারে।", "Workspace": "ওয়ার্কস্পেস", "Overview": "ওভারভিউ", "Requests": "অনুরোধ", "Members": "সদস্য", "Donations": "রক্তদান", "Reports": "রিপোর্ট", "Content": "কনটেন্ট", "Notices": "নোটিশ", "Team": "টিম", "Kapilmuni Blood": "কপিলমুনি ব্লাড", "Admin console": "অ্যাডমিন কনসোল", "Log out": "লগ আউট", "Administrator": "অ্যাডমিনিস্ট্রেটর", "Password access": "পাসওয়ার্ড অ্যাক্সেস", "Refresh": "রিফ্রেশ", "Menu": "মেনু", "Platform summary and recent activity": "প্ল্যাটফর্মের সারসংক্ষেপ ও সাম্প্রতিক কার্যক্রম", "Review, close and moderate blood requests": "রক্তের অনুরোধ দেখুন, বন্ধ করুন ও নিয়ন্ত্রণ করুন", "Manage donors, receivers and admins": "দাতা, গ্রহীতা ও অ্যাডমিন পরিচালনা করুন", "Verified donation records": "যাচাইকৃত রক্তদানের রেকর্ড", "People shown on the public volunteers list": "পাবলিক স্বেচ্ছাসেবক তালিকায় দেখানো ব্যক্তিরা", "Reports from users about requests and donors": "অনুরোধ ও দাতা সম্পর্কে ব্যবহারকারীদের রিপোর্ট", "Announcements shown on every member's home page": "প্রতিটি সদস্যের হোম পেজে দেখানো ঘোষণা", "Total members": "মোট সদস্য", "Available donors": "উপলব্ধ দাতা", "Active requests": "সক্রিয় অনুরোধ", "Fulfilled requests": "পূরণ হওয়া অনুরোধ", "Donations logged": "নথিভুক্ত রক্তদান", "verified records": "যাচাইকৃত রেকর্ড", "Open reports": "খোলা রিপোর্ট", "needs review": "পর্যালোচনা প্রয়োজন", "Blocked members": "ব্লক করা সদস্য", "suspended accounts": "স্থগিত অ্যাকাউন্ট", "Donors by blood group": "রক্তের গ্রুপ অনুযায়ী দাতা", "Request fulfilment": "অনুরোধ পূরণ", "fulfilment rate": "পূরণের হার", "Latest requests": "সর্বশেষ অনুরোধ", "View all": "সব দেখুন", "New members": "নতুন সদস্য", "No requests yet": "এখনও কোনো অনুরোধ নেই", "No members yet": "এখনও কোনো সদস্য নেই", "Top districts by requests": "অনুরোধ অনুযায়ী শীর্ষ জেলা", "Requests in last 7 days": "গত ৭ দিনের অনুরোধ", "Mon": "সোম", "Tue": "মঙ্গল", "Wed": "বুধ", "Thu": "বৃহ.", "Fri": "শুক্র", "Sat": "শনি", "Sun": "রবি", "Search name, email, phone or district": "নাম, ইমেইল, ফোন বা জেলা খুঁজুন", "All roles": "সব ভূমিকা", "Donor": "দাতা", "Receiver": "গ্রহীতা", "Admin": "অ্যাডমিন", "All groups": "সব গ্রুপ", "Any status": "যেকোনো অবস্থা", "Available": "উপলব্ধ", "Unavailable": "অনুপলব্ধ", "Export CSV": "CSV এক্সপোর্ট", "Member": "সদস্য", "Blood": "রক্ত", "Role": "ভূমিকা", "District": "জেলা", "Status": "অবস্থা", "Joined": "যোগদান", "Actions": "কার্যক্রম", "No members match these filters": "এই ফিল্টারে কোনো সদস্য মেলেনি", "Edit": "সম্পাদনা", "Delete": "মুছুন", "Verify donor": "দাতা যাচাই করুন", "Remove verification": "যাচাই সরান", "Block": "ব্লক করুন", "Unblock": "আনব্লক করুন", "Blocked": "ব্লক করা", "Verified": "যাচাইকৃত", "Edit member": "সদস্য সম্পাদনা", "Full name": "পূর্ণ নাম", "Phone": "ফোন", "Donation count": "রক্তদানের সংখ্যা", "Available to donate": "রক্ত দিতে প্রস্তুত", "Verified donor": "যাচাইকৃত দাতা", "Blocked (cannot log in)": "ব্লক (লগইন করতে পারবে না)", "Remove photo": "ছবি সরান", "Gender": "লিঙ্গ", "Not set": "নির্ধারিত নয়", "Male": "পুরুষ", "Female": "মহিলা", "Cancel": "বাতিল", "Save changes": "পরিবর্তন সংরক্ষণ করুন", "Select district": "জেলা নির্বাচন করুন", "Name is required": "নাম আবশ্যক", "Grant admin access?": "অ্যাডমিন অ্যাক্সেস দেবেন?", "This member will be able to manage all data in the admin console.": "এই সদস্য অ্যাডমিন কনসোলের সব তথ্য পরিচালনা করতে পারবে।", "Grant access": "অ্যাক্সেস দিন", "Member updated": "সদস্য আপডেট হয়েছে", "Could not save changes": "পরিবর্তন সংরক্ষণ করা যায়নি", "Block this member?": "এই সদস্যকে ব্লক করবেন?", "They will not be able to log in or appear in donor search.": "তিনি লগইন করতে বা দাতা খোঁজায় আসতে পারবেন না।", "Member blocked": "সদস্য ব্লক হয়েছে", "Member unblocked": "সদস্য আনব্লক হয়েছে", "Donor verified": "দাতা যাচাই হয়েছে", "Verification removed": "যাচাই সরানো হয়েছে", "Unblock this member?": "এই সদস্যকে আনব্লক করবেন?", "They will be able to log in again.": "তিনি আবার লগইন করতে পারবেন।", "All": "সব", "Active": "সক্রিয়", "Emergency": "জরুরি", "Completed": "সম্পন্ন", "Search patient, hospital, phone or location": "রোগী, হাসপাতাল, ফোন বা অবস্থান খুঁজুন", "Patient": "রোগী", "Hospital / location": "হাসপাতাল / অবস্থান", "Contact": "যোগাযোগ", "Needed by": "প্রয়োজনের তারিখ", "Posted": "পোস্ট করা হয়েছে", "No requests found": "কোনো অনুরোধ পাওয়া যায়নি", "No details": "কোনো বিবরণ নেই", "Reopen": "পুনরায় খুলুন", "Mark complete": "সম্পন্ন করুন", "Reopen this request?": "এই অনুরোধ পুনরায় খুলবেন?", "It will appear in the public feed again.": "এটি আবার পাবলিক ফিডে দেখা যাবে।", "Request reopened": "অনুরোধ পুনরায় খোলা হয়েছে", "Could not reopen": "পুনরায় খোলা যায়নি", "Complete request": "অনুরোধ সম্পন্ন করুন", "Close the request for": "এই অনুরোধটি বন্ধ করুন:", ". Optionally credit the donor who gave blood.": "। ইচ্ছা করলে যে দাতা রক্ত দিয়েছেন তাকে কৃতিত্ব দিন।", "Donor phone number (optional)": "দাতার ফোন নম্বর (ঐচ্ছিক)", "e.g. 01XXXXXXXXX": "যেমন 01XXXXXXXXX", "Leave empty to close without crediting a donor.": "কোনো দাতাকে কৃতিত্ব না দিয়ে বন্ধ করতে খালি রাখুন।", "No member with this number. The request will close without credit.": "এই নম্বরে কোনো সদস্য নেই। অনুরোধটি কৃতিত্ব ছাড়াই বন্ধ হবে।", "Mark as completed": "সম্পন্ন হিসেবে চিহ্নিত করুন", "Request completed, donor credited": "অনুরোধ সম্পন্ন, দাতাকে কৃতিত্ব দেওয়া হয়েছে", "Request completed": "অনুরোধ সম্পন্ন হয়েছে", "Error completing request": "অনুরোধ সম্পন্ন করতে সমস্যা হয়েছে", "Edit request": "অনুরোধ সম্পাদনা", "Patient name": "রোগীর নাম", "Problem / disease": "সমস্যা / রোগ", "Hospital": "হাসপাতাল", "Blood group": "রক্তের গ্রুপ", "Contact number": "যোগাযোগের নম্বর", "Request updated": "অনুরোধ আপডেট হয়েছে", "Search donor or patient": "দাতা বা রোগী খুঁজুন", "Date": "তারিখ", "Patient helped": "যার জীবন বাঁচিয়েছেন", "No donation records": "কোনো রক্তদানের রেকর্ড নেই", "Deleted member": "মুছে ফেলা সদস্য", "verified": "যাচাইকৃত", "Add team member": "টিম সদস্য যোগ করুন", "Role (e.g. Volunteer)": "ভূমিকা (যেমন স্বেচ্ছাসেবক)", "Image URL (optional)": "ছবির লিংক (ঐচ্ছিক)", "Add": "যোগ করুন", "No team members yet": "এখনও কোনো টিম সদস্য নেই", "Remove": "সরান", "Name and role are required": "নাম ও ভূমিকা আবশ্যক", "Member added": "সদস্য যোগ হয়েছে", "Error adding member": "সদস্য যোগ করতে সমস্যা হয়েছে", "Open": "খোলা", "Resolved": "সমাধান হয়েছে", "Type": "ধরন", "Reported item": "রিপোর্ট করা বিষয়", "Reason": "কারণ", "Reported by": "রিপোর্টকারী", "Request": "অনুরোধ", "Reports are sent by users from request and donor pages.": "ব্যবহারকারীরা অনুরোধ ও দাতার পেজ থেকে রিপোর্ট পাঠান।", "No reports": "কোনো রিপোর্ট নেই", "Mark resolved": "সমাধান হিসেবে চিহ্নিত করুন", "Block member": "সদস্য ব্লক করুন", "Delete request": "অনুরোধ মুছুন", "Marked as resolved": "সমাধান হিসেবে চিহ্নিত", "Report reopened": "রিপোর্ট পুনরায় খোলা হয়েছে", "Delete this request?": "এই অনুরোধ মুছবেন?", "Deleted": "মুছে ফেলা হয়েছে", "Publish notice": "নোটিশ প্রকাশ করুন", "Title (English)": "শিরোনাম (ইংরেজি)", "Title (Bangla, optional)": "শিরোনাম (বাংলা, ঐচ্ছিক)", "Message (English)": "বার্তা (ইংরেজি)", "Message (Bangla, optional)": "বার্তা (বাংলা, ঐচ্ছিক)", "Publish": "প্রকাশ করুন", "Visible": "দৃশ্যমান", "Hidden": "লুকানো", "Show": "দেখান", "Hide": "লুকান", "No notices yet": "এখনও কোনো নোটিশ নেই", "Title and message are required": "শিরোনাম ও বার্তা আবশ্যক", "Notice published": "নোটিশ প্রকাশিত হয়েছে", "Notice updated": "নোটিশ আপডেট হয়েছে", "Could not load data": "তথ্য লোড করা যায়নি", "Data refreshed": "তথ্য রিফ্রেশ হয়েছে", "Their profile record is removed. Their login account is not deleted.": "তাদের প্রোফাইল রেকর্ড মুছে যাবে। লগইন অ্যাকাউন্ট মুছবে না।", "This cannot be undone.": "এটি আর ফেরানো যাবে না।", "Cancel ": "বাতিল", "donor": "দাতা", "receiver": "গ্রহীতা", "admin": "অ্যাডমিন", "user": "ব্যবহারকারী"};
+function bd(s){return String(s).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'.charAt(d);});}
+var PAT=[
+ [/^(\d+) donors$/,function(m){return bd(m[1])+' জন দাতা';}],
+ [/^of (\d+) registered$/,function(m){return 'মোট নিবন্ধিত '+bd(m[1])+' জনের মধ্যে';}],
+ [/^(\d+) emergency$/,function(m){return bd(m[1])+'টি জরুরি';}],
+ [/^(\d+) total$/,function(m){return 'মোট '+bd(m[1]);}],
+ [/^Completed (\d+)$/,function(m){return 'সম্পন্ন '+bd(m[1]);}],
+ [/^Standard (\d+)$/,function(m){return 'সাধারণ '+bd(m[1]);}],
+ [/^Emergency (\d+)$/,function(m){return 'জরুরি '+bd(m[1]);}],
+ [/^(\d+)-(\d+) of (\d+)$/,function(m){return bd(m[1])+'-'+bd(m[2])+' / '+bd(m[3]);}],
+ [/^(\d+) records$/,function(m){return bd(m[1])+'টি রেকর্ড';}],
+ [/^Too many attempts\. Try again in (\d+)s\.$/,function(m){return 'অনেকবার চেষ্টা হয়েছে। '+bd(m[1])+' সেকেন্ড পরে চেষ্টা করুন।';}],
+ [/^Delete this (.+)\?$/,function(m){var L={'member':'সদস্য','request':'অনুরোধ','team member':'টিম সদস্য','report':'রিপোর্ট','notice':'নোটিশ'};return 'এই '+(L[m[1]]||m[1])+' মুছবেন?';}],
+ [/^Exported (\d+) rows$/,function(m){return bd(m[1])+'টি সারি এক্সপোর্ট হয়েছে';}],
+ [/^Donor found: (.+)$/,function(m){return 'দাতা পাওয়া গেছে: '+m[1];}],
+ [/^Error: (.+)$/,function(m){return 'ত্রুটি: '+m[1];}]
+];
+function tr(s){
+ if(LANG!=='bn')return s;
+ if(Object.prototype.hasOwnProperty.call(BN,s))return BN[s];
+ for(var i=0;i<PAT.length;i++){var m=s.match(PAT[i][0]);if(m)return PAT[i][1](m);}
+ return s;
+}
+var OT=new WeakMap(),OS=new WeakMap(),OA=new WeakMap(),ATTRS=['placeholder','aria-label','title','label'];
+function trText(n){
+ var p=n.parentNode;if(!p||p.nodeName==='SCRIPT'||p.nodeName==='STYLE'||p.nodeName==='TEXTAREA')return;
+ var cur=n.data,orig;
+ if(OS.has(n)&&OS.get(n)===cur)orig=OT.get(n);else{orig=cur;OT.set(n,cur);}
+ var core=orig.trim();if(!core)return;
+ var out=LANG==='bn'?tr(core):core;
+ var val=orig.replace(core,function(){return out;});
+ if(val!==cur){OS.set(n,val);n.data=val;}
+}
+function trAttr(el){
+ var rec=OA.get(el);if(!rec){rec={};OA.set(el,rec);}
+ for(var k=0;k<ATTRS.length;k++){
+  var a=ATTRS[k];if(!el.hasAttribute(a))continue;
+  var cur=el.getAttribute(a),r=rec[a],orig=(r&&r.set===cur)?r.orig:cur;
+  var out=LANG==='bn'?tr(orig.trim()):orig;
+  rec[a]={orig:orig,set:out};
+  if(out!==cur)el.setAttribute(a,out);
+ }
+}
+function walk(n){
+ if(n.nodeType===3){trText(n);return;}
+ if(n.nodeType!==1||n.nodeName==='SCRIPT'||n.nodeName==='STYLE')return;
+ trAttr(n);
+ for(var c=n.firstChild;c;c=c.nextSibling)walk(c);
+}
+var mo=new MutationObserver(function(ms){
+ if(LANG!=='bn')return;
+ mo.disconnect();
+ try{
+  for(var i=0;i<ms.length;i++){
+   var m=ms[i];
+   if(m.type==='childList'){for(var j=0;j<m.addedNodes.length;j++)walk(m.addedNodes[j]);}
+   else if(m.type==='characterData')trText(m.target);
+   else if(m.type==='attributes')trAttr(m.target);
+  }
+ }finally{start();}
+});
+function start(){mo.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATTRS});}
+function mark(){
+ var b=document.querySelectorAll('.lang-sw button[data-lang]');
+ for(var i=0;i<b.length;i++)b[i].classList.toggle('on',b[i].getAttribute('data-lang')===LANG);
+}
+window.t=function(s){return tr(String(s));};
+window.getLang=function(){return LANG;};
+window.setLang=function(l){
+ LANG=(l==='bn')?'bn':'en';
+ try{localStorage.setItem(KEY,LANG);}catch(e){}
+ document.documentElement.lang=LANG;mark();
+ mo.disconnect();walk(document.body);start();
+ if(window.onLangChange)window.onLangChange(LANG);
+};
+function init(){document.documentElement.lang=LANG;mark();walk(document.body);start();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signOut, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, where, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhMPUPSUtjgwg046zgHjfw_uDJS76SoyU",
+            authDomain: "kapilmunibled.firebaseapp.com",
+            projectId: "kapilmunibled",
+            storageBucket: "kapilmunibled.firebasestorage.app",
+            messagingSenderId: "731044825658",
+            appId: "1:731044825658:web:5471a9ec61732719ea8303",
+            measurementId: "G-XJT0BG0C61"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        // Analytics (optional, ignored if the browser does not support it)
+        import("https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js").then(m => m.isSupported().then(ok => { if (ok) m.getAnalytics(app); })).catch(() => {});
+        let currentUserData = null;
+
+        // --- 64 DISTRICT DATA ---
+        const districtOptionsHTML = `
+            <optgroup label="Dhaka Division">
+                <option value="Dhaka">Dhaka</option>
+                <option value="Faridpur">Faridpur</option>
+                <option value="Gazipur">Gazipur</option>
+                <option value="Gopalganj">Gopalganj</option>
+                <option value="Kishoreganj">Kishoreganj</option>
+                <option value="Madaripur">Madaripur</option>
+                <option value="Manikganj">Manikganj</option>
+                <option value="Munshiganj">Munshiganj</option>
+                <option value="Narayanganj">Narayanganj</option>
+                <option value="Narsingdi">Narsingdi</option>
+                <option value="Rajbari">Rajbari</option>
+                <option value="Shariatpur">Shariatpur</option>
+                <option value="Tangail">Tangail</option>
+            </optgroup>
+            <optgroup label="Chattogram Division">
+                <option value="Bandarban">Bandarban</option>
+                <option value="Brahmanbaria">Brahmanbaria</option>
+                <option value="Chandpur">Chandpur</option>
+                <option value="Chattogram">Chattogram</option>
+                <option value="Comilla">Comilla</option>
+                <option value="Cox's Bazar">Cox's Bazar</option>
+                <option value="Feni">Feni</option>
+                <option value="Khagrachhari">Khagrachhari</option>
+                <option value="Lakshmipur">Lakshmipur</option>
+                <option value="Noakhali">Noakhali</option>
+                <option value="Rangamati">Rangamati</option>
+            </optgroup>
+            <optgroup label="Rajshahi Division">
+                <option value="Bogura">Bogura</option>
+                <option value="Chapainawabganj">Chapainawabganj</option>
+                <option value="Joypurhat">Joypurhat</option>
+                <option value="Naogaon">Naogaon</option>
+                <option value="Natore">Natore</option>
+                <option value="Pabna">Pabna</option>
+                <option value="Rajshahi">Rajshahi</option>
+                <option value="Sirajganj">Sirajganj</option>
+            </optgroup>
+            <optgroup label="Khulna Division">
+                <option value="Bagerhat">Bagerhat</option>
+                <option value="Chuadanga">Chuadanga</option>
+                <option value="Jashore">Jashore</option>
+                <option value="Jhenaidah">Jhenaidah</option>
+                <option value="Khulna">Khulna</option>
+                <option value="Kushtia">Kushtia</option>
+                <option value="Magura">Magura</option>
+                <option value="Meherpur">Meherpur</option>
+                <option value="Narail">Narail</option>
+                <option value="Satkhira">Satkhira</option>
+            </optgroup>
+            <optgroup label="Barishal Division">
+                <option value="Barguna">Barguna</option>
+                <option value="Barishal">Barishal</option>
+                <option value="Bhola">Bhola</option>
+                <option value="Jhalokati">Jhalokati</option>
+                <option value="Patuakhali">Patuakhali</option>
+                <option value="Pirojpur">Pirojpur</option>
+            </optgroup>
+            <optgroup label="Sylhet Division">
+                <option value="Habiganj">Habiganj</option>
+                <option value="Moulvibazar">Moulvibazar</option>
+                <option value="Sunamganj">Sunamganj</option>
+                <option value="Sylhet">Sylhet</option>
+            </optgroup>
+            <optgroup label="Rangpur Division">
+                <option value="Dinajpur">Dinajpur</option>
+                <option value="Gaibandha">Gaibandha</option>
+                <option value="Kurigram">Kurigram</option>
+                <option value="Lalmonirhat">Lalmonirhat</option>
+                <option value="Nilphamari">Nilphamari</option>
+                <option value="Panchagarh">Panchagarh</option>
+                <option value="Rangpur">Rangpur</option>
+                <option value="Thakurgaon">Thakurgaon</option>
+            </optgroup>
+            <optgroup label="Mymensingh Division">
+                <option value="Jamalpur">Jamalpur</option>
+                <option value="Mymensingh">Mymensingh</option>
+                <option value="Netrokona">Netrokona</option>
+                <option value="Sherpur">Sherpur</option>
+            </optgroup>
+        `;
+
+        function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.style.opacity = '1'; clearTimeout(window._tt); window._tt = setTimeout(() => t.style.opacity = '0', 3000); }
+        const offlineBanner = document.getElementById('offline-banner');
+        const syncOnline = () => offlineBanner.classList.toggle('show', !navigator.onLine);
+        window.addEventListener('online', syncOnline); window.addEventListener('offline', syncOnline); syncOnline();
+
+        // ===== Profile pictures (default male / female silhouettes or uploaded photo) =====
+const AV_PAL = { male: ['#DDE9EF', '#BCD0DA', '#7E9AA9', '#5C7888'], female: ['#EEE3E8', '#D6C3CC', '#9C8591', '#765F6B'], neutral: ['#E3EBEF', '#C8D5DC', '#8CA0AB', '#6B7F8A'] };
+const _avCache = {};
+function defaultAvatar(g) {
+    const k = (g === 'male' || g === 'female') ? g : 'neutral';
+    if (_avCache[k]) return _avCache[k];
+    const c = AV_PAL[k];
+    const hair = k === 'male'
+        ? `<path d="M41 47C39 28 50 21 60 21C71 21 81 28 79 47C75 39 69 35 60 35C51 35 45 39 41 47Z" fill="${c[3]}"/>`
+        : (k === 'female'
+            ? `<path d="M37 56C32 30 46 19 60 19C75 19 88 30 83 56C85 70 84 82 80 92C77 82 77 68 76 56C73 41 67 34 60 34C53 34 47 41 44 56C43 68 43 82 40 92C36 82 35 70 37 56Z" fill="${c[3]}"/>`
+            : '');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="120" height="120" fill="url(#g)"/><path d="M12 124C12 96 33 85 60 85C87 85 108 96 108 124Z" fill="${c[2]}"/><rect x="52" y="68" width="16" height="20" rx="6" fill="${c[2]}"/><ellipse cx="60" cy="51" rx="18" ry="21" fill="${c[2]}"/>${hair}</svg>`;
+    return (_avCache[k] = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg));
+}
+function avatarSrc(u) {
+    const p = u && u.photoURL;
+    if (typeof p === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(p)) return p;
+    return defaultAvatar(u && u.gender);
+}
+
+        // --- ADMIN SIGN-IN (Firebase Email/Password) ---
+        // Create this account ONCE in Firebase Console -> Authentication -> Users -> Add user.
+        // The password you set there is your admin password (it is NOT stored in this file).
+        // The same email must be written in firestore.rules (function isAdmin).
+        const ADMIN_EMAIL = 'admin@kapilmuni.app';
+        const lgErr = m => { const e = document.getElementById('lg-err'); e.innerText = m || ''; e.classList.toggle('hidden', !m); };
+        let _fails = 0, _lockUntil = 0;
+        window.adminLogin = async () => {
+            const wait = Math.ceil((_lockUntil - Date.now()) / 1000);
+            if (wait > 0) return lgErr('Too many attempts. Try again in ' + wait + 's.');
+            const pass = document.getElementById('lg-pass').value;
+            if (!pass) return lgErr('Enter the password.');
+            const b = document.getElementById('lg-btn'); b.disabled = true;
+            try { await signInWithEmailAndPassword(auth, ADMIN_EMAIL, pass); sessionStorage.setItem('lb_admin', '1'); location.reload(); }
+            catch (e) {
+                b.disabled = false; document.getElementById('lg-pass').value = '';
+                const c = (e && e.code) || '';
+                if (c === 'auth/network-request-failed') return lgErr('Network error. Check your connection.');
+                if (c === 'auth/too-many-requests') return lgErr('Too many attempts. Try again later.');
+                if (c === 'auth/user-not-found' || c === 'auth/operation-not-allowed') return lgErr('Admin account is not set up yet (see README, step 3).');
+                _fails++; if (_fails >= 5) { _lockUntil = Date.now() + 30000; _fails = 0; return lgErr('Too many attempts. Try again in 30s.'); }
+                lgErr('Incorrect password.');
+            }
+        };
+        window.handleLogout = () => { sessionStorage.removeItem('lb_admin'); signOut(auth).catch(() => {}).finally(() => location.reload()); };
+
+
+        // --- ADMIN PANEL (v2) ---
+        const ADM = { users: [], reqs: [], dons: [], team: [], reports: [], notices: [], loaded: {} };
+        const ADV = { users: { page: 1, rows: [] }, reqs: { page: 1, rows: [], tab: 'all' }, dons: { page: 1, rows: [] }, reps: { tab: 'open' } };
+        const PAGE = 12;
+        const AD_TITLES = {
+            dash: ['Overview', 'Platform summary and recent activity'],
+            reqs: ['Urgent requests', 'Review, close and moderate blood requests'],
+            users: ['Members', 'Manage donors, receivers and admins'],
+            dons: ['Donations', 'Verified donation records'],
+            site: ['Site settings', 'Name, logo, banners, popups and ID card'],
+            live: ['Live activity', 'Real-time activity across the platform'],
+            team: ['Community', 'People shown on the public volunteers list'],
+            chats: ['Chats & Online', 'Who is online now and all user conversations'],
+            reports: ['Reports', 'Reports from users about requests and donors'],
+            support: ['Live support', 'Chat with members in real time, export chats, ban or unban'],
+            maint: ['Maintenance mode', 'Show an update notice and block all users while you update'],
+            nbar: ['Notice bar', 'One moving line of text on every member\'s home page'],
+            nall: ['Send notification', 'Send a message to one member, some members, or everyone'],
+            banners: ['Slider banners', 'Images that slide automatically at the top of the home page'],
+            cardreq: ['ID card requests', 'Verify, approve or reject donor ID card requests'],
+            notices: ['Notices', 'Announcements shown on every member\'s home page']
+        };
+        const tms = v => v?.seconds ? v.seconds * 1000 : (v?.toDate ? v.toDate().getTime() : (v instanceof Date ? v.getTime() : 0));
+        const fdate = ms => ms ? new Date(ms).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+        const initials = n => (String(n || '?').trim()[0] || '?');
+        const $a = id => document.getElementById(id);
+
+        function showAdminPanel() {
+            $a('login-page').classList.add('hidden');
+            $a('admin-panel').classList.remove('hidden');
+            const me = currentUserData || {};
+            $a('ad-me-name').innerText = me.name || 'Admin';
+            $a('ad-me-mail').innerText = me.email || '';
+            $a('ad-me-av').innerText = initials(me.name || 'A').toUpperCase();
+            adminNav('dash');
+        }
+
+        window.toggleMobileMenu = () => {
+            $a('adm-sidebar').classList.toggle('open');
+            $a('ad-overlay').classList.toggle('open');
+        };
+
+        async function admLoad(name, force) {
+            if (ADM.loaded[name] && !force) return ADM[name];
+            const col = { users: 'users', reqs: 'requests', dons: 'donations', team: 'team', reports: 'reports', notices: 'announcements' }[name];
+            const snap = await getDocs(collection(db, col));
+            const arr = []; snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+            if (name === 'users') arr.sort((a, b) => tms(b.createdAt) - tms(a.createdAt));
+            if (name === 'reqs') arr.sort((a, b) => tms(b.createdAt) - tms(a.createdAt));
+            if (name === 'dons') arr.sort((a, b) => tms(b.date) - tms(a.date));
+            if (name === 'reports' || name === 'notices') arr.sort((a, b) => tms(b.createdAt) - tms(a.createdAt));
+            ADM[name] = arr; ADM.loaded[name] = true;
+            return arr;
+        }
+
+        window.adminNav = async (view) => {
+            window.__ADM=ADM;['dash', 'users', 'reqs', 'dons', 'reports', 'nbar', 'nall', 'banners', 'cardreq', 'support', 'maint', 'team', 'site', 'live', 'chats'].forEach(v => {
+                $a('view-' + v).classList.toggle('hidden', v !== view);
+                $a('nav-' + v).classList.toggle('on', v === view);
+            });
+            $a('ad-title').innerText = AD_TITLES[view][0];
+            $a('ad-sub').innerText = AD_TITLES[view][1];
+            $a('adm-sidebar').classList.remove('open'); $a('ad-overlay').classList.remove('open');
+            window.admView = view;
+            try {
+                if (view === 'dash') { await Promise.all([admLoad('users'), admLoad('reqs'), admLoad('dons'), admLoad('reports').catch(() => {})]); renderDash(); }
+                if (view === 'users') { $a('users-loader').classList.remove('hidden'); await admLoad('users'); await admLoad('dons'); $a('users-loader').classList.add('hidden'); admUsersFilter(true); }
+                if (view === 'reqs') { $a('reqs-loader').classList.remove('hidden'); await admLoad('reqs'); $a('reqs-loader').classList.add('hidden'); admReqsFilter(true); }
+                if (view === 'dons') { $a('dons-loader').classList.remove('hidden'); await Promise.all([admLoad('dons'), admLoad('users')]); $a('dons-loader').classList.add('hidden'); admDonsFilter(true); }
+                if (view === 'reports') { $a('reports-loader').classList.remove('hidden'); await admLoad('reports'); $a('reports-loader').classList.add('hidden'); renderReports(); }
+                if (view === 'notices') { await admLoad('notices'); renderNotices(); }
+                if (view === 'team') { $a('team-loader').classList.remove('hidden'); await admLoad('team'); $a('team-loader').classList.add('hidden'); renderTeam(); }
+            } catch (e) { console.error(e); showToast('Could not load data'); ['users', 'reqs', 'dons', 'team', 'reports'].forEach(k => $a(k + '-loader')?.classList.add('hidden')); }
+            try { window.kxaView && window.kxaView(view); } catch (e) {}
+            updateNavCount();
+        };
+
+        window.admRefresh = async () => {
+            const ic = $a('ad-refresh-ic'); ic.style.animation = 'spin 1s linear infinite';
+            ADM.loaded = {};
+            await adminNav(window.admView || 'dash');
+            ic.style.animation = ''; showToast('Data refreshed');
+        };
+
+        function updateNavCount() {
+            const n = ADM.reqs.filter(r => r.status === 'active').length;
+            const el = $a('nav-reqs-count'); el.innerText = n; el.classList.toggle('hidden', !n);
+            const m = ADM.reports.filter(r => r.status !== 'resolved').length;
+            const e2 = $a('nav-reports-count'); if (e2) { e2.innerText = m; e2.classList.toggle('hidden', !m); }
+        }
+
+        // ---------- Overview ----------
+        function renderDash() {
+            const U = ADM.users, R = ADM.reqs, D = ADM.dons;
+            const donors = U.filter(u => u.role === 'donor');
+            const avail = donors.filter(u => u.available);
+            const active = R.filter(r => r.status === 'active'), done = R.filter(r => r.status === 'completed');
+            const emer = active.filter(r => r.isEmergency);
+            const k = (cls, ic, label, val, sub) => `<div class="ad-kpi"><div class="ic ${cls}"><i class="fa-solid ${ic}"></i></div><div><p>${label}</p><b>${val}</b><small>${sub}</small></div></div>`;
+            $a('ad-kpis').innerHTML =
+                k('t-teal', 'fa-users', 'Total members', U.length, donors.length + ' donors') +
+                k('t-green', 'fa-hand-holding-medical', 'Available donors', avail.length, 'of ' + donors.length + ' registered') +
+                k('t-red', 'fa-droplet', 'Active requests', active.length, emer.length + ' emergency') +
+                k('t-amber', 'fa-circle-check', 'Fulfilled requests', done.length, R.length + ' total') +
+                k('t-purple', 'fa-heart-pulse', 'Donations logged', D.length, 'verified records');
+            // blood bars
+            const groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+            const counts = groups.map(g => donors.filter(u => u.blood === g).length), max = Math.max(1, ...counts);
+            $a('ad-bg-note').innerText = donors.length + ' donors';
+            $a('ad-bg-bars').innerHTML = groups.map((g, i) => `<div class="ad-brow"><b>${g}</b><div class="ad-track"><div style="width:${counts[i] / max * 100}%"></div></div><span>${counts[i]}</span></div>`).join('');
+            // fulfilment
+            const total = R.length, rate = total ? Math.round(done.length / total * 100) : 0;
+            const seg = (n, c) => total ? `<div style="width:${n / total * 100}%;background:${c}"></div>` : '';
+            $a('ad-fulfil').innerHTML = `<div class="ad-fu"><div class="big">${rate}%<small>fulfilment rate</small></div>
+                <div class="ad-seg">${seg(done.length, '#16A34A')}${seg(active.length - emer.length, '#D32F2F')}${seg(emer.length, '#D64545')}</div>
+                <div class="ad-legend"><span><i style="background:#16A34A"></i>Completed ${done.length}</span><span><i style="background:#D32F2F"></i>Standard ${active.length - emer.length}</span><span><i style="background:#D64545"></i>Emergency ${emer.length}</span></div></div>`;
+            // recent
+            $a('ad-recent-reqs').innerHTML = R.slice(0, 5).map(r => `<div><div class="bx">${esc(r.blood)}</div><div class="tx"><b>${esc(r.patient)}</b><span>${esc(r.hospital || '')}${r.hospital && r.location ? ', ' : ''}${esc(r.location || '')}</span></div>${reqPill(r)}</div>`).join('') || '<div class="ad-empty">No requests yet</div>';
+            $a('ad-recent-users').innerHTML = U.slice(0, 5).map(u => `<div><div class="bx" style="background:#E3F2F6;color:#D32F2F">${esc(u.blood || '-')}</div><div class="tx"><b>${esc(u.name || 'No name')}</b><span>${esc(u.district || '-')} \u00B7 ${fdate(tms(u.createdAt))}</span></div>${rolePill(u.role)}</div>`).join('') || '<div class="ad-empty">No members yet</div>';
+        }
+
+        function pill(t, c, dot) { return `<span class="ad-pill ${c}">${dot ? '<i></i>' : ''}${t}</span>`; }
+        function reqPill(r) {
+            if (r.status === 'completed') return pill('Completed', 't-green');
+            return r.isEmergency ? pill('Emergency', 't-red', 1) : pill('Active', 't-teal');
+        }
+        function rolePill(role) { return pill(esc(role || 'user'), role === 'admin' ? 't-purple' : (role === 'donor' ? 't-teal' : 't-gray')); }
+
+        function pager(id, st, total, fn) {
+            const pages = Math.max(1, Math.ceil(total / PAGE)), el = $a(id);
+            if (total <= PAGE) { el.innerHTML = ''; return; }
+            const from = (st.page - 1) * PAGE + 1, to = Math.min(total, st.page * PAGE);
+            el.innerHTML = `<span>${from}-${to} of ${total}</span><div><button class="ad-btn" ${st.page <= 1 ? 'disabled' : ''} onclick="${fn}(-1)"><i class="fa-solid fa-chevron-left"></i></button><button class="ad-btn" ${st.page >= pages ? 'disabled' : ''} onclick="${fn}(1)"><i class="fa-solid fa-chevron-right"></i></button></div>`;
+        }
+
+        // ---------- Members ----------
+        window.admUsersFilter = (keep) => {
+            const q = $a('u-q').value.toLowerCase().trim(), role = $a('u-role').value, bl = $a('u-blood').value, av = $a('u-avail').value;
+            ADV.users.rows = ADM.users.filter(u =>
+                (!role || u.role === role) && (!bl || u.blood === bl) &&
+                (av === '' || (av === '1' ? u.available : !u.available)) &&
+                (!q || [u.name, u.email, u.phone, u.district].some(x => String(x || '').toLowerCase().includes(q))));
+            if (keep !== true) ADV.users.page = 1;
+            renderUsers();
+        };
+        function renderUsers() {
+            const st = ADV.users, rows = st.rows.slice((st.page - 1) * PAGE, st.page * PAGE), me = auth.currentUser?.uid;
+            $a('users-table-body').innerHTML = rows.map(u => `<tr>
+                <td><div class="ad-who"><div class="av av-p"><img src="${esc(avatarSrc(u))}" alt=""></div><div><b>${esc(u.name || 'No name')}</b><span>${esc(u.email || u.phone || '')}</span></div></div></td>
+                <td><span class="ad-bl">${esc(u.blood || '-')}</span></td>
+                <td>${rolePill(u.role)}</td>
+                <td>${esc(u.district || '-')}</td>
+                <td>${statusCell(u)}</td>
+                <td>${u.donationCount || 0}</td>
+                <td>${fdate(tms(u.createdAt))}</td>
+                <td class="r"><button class="ad-ib" title="View profile" onclick="kxaProfile('${u.id}')"><i class="fa-solid fa-eye"></i></button>${u.role === 'donor' ? `<button class="ad-ib ok" title="${u.verified ? 'Remove verification' : 'Verify donor'}" onclick="admToggleFlag('${u.id}','verified')"><i class="fa-solid fa-${u.verified ? 'circle-check' : 'certificate'}"></i></button>` : ''}${u.role !== 'admin' && u.id !== me ? `<button class="ad-ib dg" title="${u.blocked ? 'Unblock' : 'Block'}" onclick="admToggleFlag('${u.id}','blocked')"><i class="fa-solid fa-${u.blocked ? 'lock-open' : 'ban'}"></i></button>` : ''}<button class="ad-ib" title="Edit" onclick="admEditUser('${u.id}')"><i class="fa-solid fa-pen"></i></button>${u.role !== 'admin' && u.id !== me ? `<button class="ad-ib dg" title="Delete" onclick="adminDeleteData('users','${u.id}')"><i class="fa-solid fa-trash"></i></button>` : ''}</td>
+            </tr>`).join('') || '<tr><td colspan="8"><div class="ad-empty">No members match these filters</div></td></tr>';
+            pager('u-pager', st, st.rows.length, 'admUsersPage');
+        }
+        window.admUsersPage = d => { ADV.users.page += d; renderUsers(); };
+
+        window.admEditUser = (id) => {
+            const u = ADM.users.find(x => x.id === id); if (!u) return;
+            const self = id === auth.currentUser?.uid;
+            admModal(`<div class="ad-mh"><h3>Edit member</h3><p>${esc(u.email || '')}</p></div>
+              <div class="ad-mb">
+                <div class="ad-eu-av"><img src="${esc(avatarSrc(u))}" alt=""><label class="ad-chk" ${u.photoURL ? '' : 'style="display:none"'}><input type="checkbox" id="eu-rmphoto">Remove photo</label></div>
+                <div><label>Full name</label><input id="eu-name" class="ad-in" value="${esc(u.name || '')}"></div>
+                <div><label>Phone</label><input id="eu-phone" class="ad-in" value="${esc(u.phone || '')}"></div>
+                <div><label>Gender</label><select id="eu-gender" class="ad-in"><option value="">Not set</option><option value="male">Male</option><option value="female">Female</option></select></div>
+                <div><label>District</label><select id="eu-district" class="ad-in district-select"><option value="">Select district</option>${districtOptionsHTML}</select></div>
+                <div><label>Role</label><select id="eu-role" class="ad-in" ${self ? 'disabled' : ''}><option value="donor">Donor</option><option value="receiver">Receiver</option><option value="admin">Admin</option></select></div>
+                <div><label>Donation count</label><input id="eu-count" type="number" min="0" class="ad-in" value="${u.donationCount || 0}"></div>
+                <label class="ad-chk"><input type="checkbox" id="eu-avail" ${u.available ? 'checked' : ''}>Available to donate</label>
+                <label class="ad-chk"><input type="checkbox" id="eu-verified" ${u.verified ? 'checked' : ''}>Verified donor</label>
+                <label class="ad-chk"><input type="checkbox" id="eu-blocked" ${u.blocked ? 'checked' : ''} ${self || u.role === 'admin' ? 'disabled' : ''}>Blocked (cannot log in)</label>
+              </div>
+              <div class="ad-mf"><button class="ad-btn" onclick="admCloseModal()">Cancel</button><button class="ad-btn ad-btn-p" id="eu-save" onclick="admSaveUser('${id}')">Save changes</button></div>`);
+            $a('eu-district').value = u.district || ''; $a('eu-role').value = u.role || 'donor'; $a('eu-gender').value = u.gender || '';
+        };
+        window.admSaveUser = async (id) => {
+            const name = $a('eu-name').value.trim(), phone = $a('eu-phone').value.trim(), district = $a('eu-district').value;
+            const role = $a('eu-role').value, count = Math.max(0, parseInt($a('eu-count').value) || 0), available = $a('eu-avail').checked;
+            if (!name) return showToast('Name is required');
+            const u = ADM.users.find(x => x.id === id);
+            if (role === 'admin' && u.role !== 'admin' && !(await admConfirm('Grant admin access?', 'This member will be able to manage all data in the admin console.', 'Grant access'))) return;
+            const btn = $a('eu-save'); btn.disabled = true;
+            try {
+                const data = { name, phone, district, donationCount: count, available, gender: $a('eu-gender').value, verified: $a('eu-verified').checked };
+                if (id !== auth.currentUser?.uid) { data.role = role; if (!$a('eu-blocked').disabled) data.blocked = $a('eu-blocked').checked; }
+                if ($a('eu-rmphoto')?.checked) data.photoURL = '';
+                await updateDoc(doc(db, 'users', id), data);
+                Object.assign(u, data); admCloseModal(); renderUsers(); showToast('Member updated');
+            } catch (e) { console.error(e); showToast('Could not save changes'); btn.disabled = false; }
+        };
+        function statusCell(u) {
+            let h = u.role === 'donor' ? (u.available ? pill('Available', 't-green', 1) : pill('Unavailable', 't-gray', 1)) : '<span class="ad-muted">-</span>';
+            if (u.verified) h += ' ' + pill('Verified', 't-teal');
+            if (u.blocked) h += ' ' + pill('Blocked', 't-red', 1);
+            return h;
+        }
+        window.admToggleFlag = async (id, flag) => {
+            const u = ADM.users.find(x => x.id === id); if (!u) return;
+            const val = !u[flag];
+            if (flag === 'blocked' && val && !(await admConfirm('Block this member?', 'They will not be able to log in or appear in donor search.', 'Block', true))) return;
+            if (flag === 'blocked' && !val && !(await admConfirm('Unblock this member?', 'They will be able to log in again.', 'Unblock'))) return;
+            try {
+                await updateDoc(doc(db, 'users', id), { [flag]: val });
+                u[flag] = val; renderUsers();
+                showToast(flag === 'blocked' ? (val ? 'Member blocked' : 'Member unblocked') : (val ? 'Donor verified' : 'Verification removed'));
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+
+        // ---------- Requests ----------
+        function reqTabCounts() {
+            const R = ADM.reqs;
+            return { all: R.length, active: R.filter(r => r.status === 'active').length, emergency: R.filter(r => r.status === 'active' && r.isEmergency).length, completed: R.filter(r => r.status === 'completed').length };
+        }
+        window.admReqTab = t => { ADV.reqs.tab = t; ADV.reqs.page = 1; admReqsFilter(true); };
+        window.admReqsFilter = (keep) => {
+            const q = $a('r-q').value.toLowerCase().trim(), tab = ADV.reqs.tab, c = reqTabCounts();
+            $a('r-tabs').innerHTML = [['all', 'All'], ['active', 'Active'], ['emergency', 'Emergency'], ['completed', 'Completed']].map(([k, l]) => `<button class="${tab === k ? 'on' : ''}" onclick="admReqTab('${k}')">${l}<em>${c[k]}</em></button>`).join('');
+            ADV.reqs.rows = ADM.reqs.filter(r =>
+                (tab === 'all' || (tab === 'active' && r.status === 'active') || (tab === 'emergency' && r.status === 'active' && r.isEmergency) || (tab === 'completed' && r.status === 'completed')) &&
+                (!q || [r.patient, r.hospital, r.phone, r.location, r.blood].some(x => String(x || '').toLowerCase().includes(q))));
+            if (keep !== true) ADV.reqs.page = 1;
+            renderReqs();
+        };
+        function renderReqs() {
+            const st = ADV.reqs, rows = st.rows.slice((st.page - 1) * PAGE, st.page * PAGE);
+            $a('reqs-body').innerHTML = rows.map(r => `<tr>
+                <td><div class="ad-who"><div><b>${esc(r.patient)}</b><span>${esc(r.problem || 'No details')}</span></div></div></td>
+                <td><span class="ad-bl">${esc(r.blood)}</span></td>
+                <td><div class="ad-who"><div><b>${esc(r.hospital || '-')}</b><span>${esc(r.location || '')}</span></div></div></td>
+                <td><a href="tel:${esc(r.phone)}" style="color:#D32F2F;font-weight:600">${esc(r.phone || '-')}</a></td>
+                <td>${esc(r.date || '-')}</td>
+                <td>${reqPill(r)}</td>
+                <td>${fdate(tms(r.createdAt))}</td>
+                <td class="r"><button class="ad-ib" title="Edit" onclick="admEditReq('${r.id}')"><i class="fa-solid fa-pen"></i></button>${r.status === 'completed'
+                    ? `<button class="ad-ib" title="Reopen" onclick="admReopen('${r.id}')"><i class="fa-solid fa-rotate-left"></i></button>`
+                    : `<button class="ad-ib ok" title="Mark complete" onclick="adminCompleteRequest('${r.id}')"><i class="fa-solid fa-check"></i></button>`}<button class="ad-ib dg" title="Delete" onclick="adminDeleteData('requests','${r.id}')"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>`).join('') || '<tr><td colspan="8"><div class="ad-empty">No requests found</div></td></tr>';
+            pager('r-pager', st, st.rows.length, 'admReqsPage');
+        }
+        window.admReqsPage = d => { ADV.reqs.page += d; renderReqs(); };
+
+        window.admReopen = async (id) => {
+            if (!(await admConfirm('Reopen this request?', 'It will appear in the public feed again.', 'Reopen'))) return;
+            try {
+                await updateDoc(doc(db, 'requests', id), { status: 'active', completedAt: null, completedByDonor: null });
+                const r = ADM.reqs.find(x => x.id === id); Object.assign(r, { status: 'active', completedAt: null, completedByDonor: null });
+                admReqsFilter(true); updateNavCount(); showToast('Request reopened');
+            } catch (e) { showToast('Could not reopen'); }
+        };
+
+        window.adminCompleteRequest = (reqId) => {
+            const r = ADM.reqs.find(x => x.id === reqId); if (!r) return;
+            admModal(`<div class="ad-mh"><h3>Complete request</h3><p>Close the request for <b>${esc(r.patient)}</b>. Optionally credit the donor who gave blood.</p></div>
+              <div class="ad-mb">
+                <div><label>Donor phone number (optional)</label><input id="cr-phone" class="ad-in" type="tel" placeholder="e.g. 01XXXXXXXXX" oninput="admDonorLookup()"></div>
+                <div class="ad-note" id="cr-note">Leave empty to close without crediting a donor.</div>
+              </div>
+              <div class="ad-mf"><button class="ad-btn" onclick="admCloseModal()">Cancel</button><button class="ad-btn ad-btn-p" id="cr-go" onclick="admDoComplete('${reqId}')">Mark as completed</button></div>`);
+        };
+        window.admDonorLookup = () => {
+            const p = $a('cr-phone').value.trim(), n = $a('cr-note');
+            if (!p) { n.className = 'ad-note'; n.innerText = 'Leave empty to close without crediting a donor.'; return; }
+            const u = ADM.users.find(x => x.phone === p);
+            if (u) { n.className = 'ad-note ok'; n.innerText = 'Donor found: ' + (u.name || 'Unnamed') + ' (' + (u.blood || '-') + ', ' + (u.district || '-') + ')'; }
+            else { n.className = 'ad-note no'; n.innerText = 'No member with this number. The request will close without credit.'; }
+        };
+        window.admDoComplete = async (reqId) => {
+            const r = ADM.reqs.find(x => x.id === reqId), p = $a('cr-phone').value.trim(), btn = $a('cr-go'); btn.disabled = true;
+            try {
+                let donor = p ? ADM.users.find(x => x.phone === p) : null;
+                if (p && !donor) { const s = await getDocs(query(collection(db, 'users'), where('phone', '==', p))); if (!s.empty) donor = { id: s.docs[0].id, ...s.docs[0].data() }; }
+                if (donor) {
+                    await updateDoc(doc(db, 'users', donor.id), { donationCount: increment(1) });
+                    await addDoc(collection(db, 'donations'), { donorId: donor.id, requestId: reqId, patient: r.patient, date: new Date(), status: 'verified' });
+                    donor.donationCount = (donor.donationCount || 0) + 1; ADM.loaded.dons = false;
+                }
+                await updateDoc(doc(db, 'requests', reqId), { status: 'completed', completedByDonor: donor ? donor.id : null, completedAt: new Date() });
+                Object.assign(r, { status: 'completed', completedByDonor: donor ? donor.id : null });
+                admCloseModal(); admReqsFilter(true); updateNavCount();
+                showToast(donor ? 'Request completed, donor credited' : 'Request completed');
+            } catch (e) { console.error(e); showToast('Error completing request'); btn.disabled = false; }
+        };
+
+        // ---------- Donations ----------
+        window.admDonsFilter = (keep) => {
+            const q = $a('d-q').value.toLowerCase().trim(), um = Object.fromEntries(ADM.users.map(u => [u.id, u]));
+            ADV.dons.rows = ADM.dons.map(d => ({ ...d, donor: um[d.donorId] })).filter(d => !q || String(d.donor?.name || '').toLowerCase().includes(q) || String(d.patient || '').toLowerCase().includes(q));
+            if (keep !== true) ADV.dons.page = 1;
+            $a('d-total').innerText = ADV.dons.rows.length + ' records';
+            renderDons();
+        };
+        function renderDons() {
+            const st = ADV.dons, rows = st.rows.slice((st.page - 1) * PAGE, st.page * PAGE);
+            $a('dons-body').innerHTML = rows.map(d => `<tr>
+                <td>${fdate(tms(d.date))}</td>
+                <td><div class="ad-who"><div class="av av-p"><img src="${esc(avatarSrc(d.donor))}" alt=""></div><div><b>${esc(d.donor?.name || 'Deleted member')}</b><span>${esc(d.donor?.phone || '')}</span></div></div></td>
+                <td><span class="ad-bl">${esc(d.donor?.blood || '-')}</span></td>
+                <td>${esc(d.patient || '-')}</td>
+                <td>${pill(esc(d.status || 'verified'), 't-green', 1)}</td>
+            </tr>`).join('') || '<tr><td colspan="5"><div class="ad-empty">No donation records</div></td></tr>';
+            pager('d-pager', st, st.rows.length, 'admDonsPage');
+        }
+        window.admDonsPage = d => { ADV.dons.page += d; renderDons(); };
+
+        // ---------- Team ----------
+        function renderTeam() {
+            $a('admin-team-grid').innerHTML = ADM.team.map(m => `<div class="ad-tm">
+                <div class="im">${m.image ? `<img src="${esc(m.image)}" alt="">` : '<i class="fa-solid fa-user"></i>'}</div>
+                <div class="tx"><b>${esc(m.name)}</b><span>${esc(m.role)}</span></div>
+                <button class="ad-ib dg" title="Remove" onclick="adminDeleteData('team','${m.id}')"><i class="fa-solid fa-trash"></i></button></div>`).join('') || '<div class="ad-empty" style="grid-column:1/-1">No team members yet</div>';
+        }
+        window.adminAddTeam = async () => {
+            const name = $a('team-name-input').value.trim(), role = $a('team-role-input').value.trim(), image = $a('team-img-input').value.trim();
+            if (!name || !role) return showToast('Name and role are required');
+            try {
+                await addDoc(collection(db, 'team'), { name, role, image });
+                ['team-name-input', 'team-role-input', 'team-img-input'].forEach(i => $a(i).value = '');
+                showToast('Member added'); await admLoad('team', true); renderTeam();
+            } catch (e) { console.error(e); showToast('Error adding member'); }
+        };
+
+        // ---------- Edit request ----------
+        window.admEditReq = (id) => {
+            const r = ADM.reqs.find(x => x.id === id); if (!r) return;
+            admModal(`<div class="ad-mh"><h3>Edit request</h3><p>${esc(r.patient || '')}</p></div>
+              <div class="ad-mb">
+                <div><label>Patient name</label><input id="er-patient" class="ad-in" value="${esc(r.patient || '')}"></div>
+                <div><label>Problem / disease</label><input id="er-problem" class="ad-in" value="${esc(r.problem || '')}"></div>
+                <div><label>Hospital</label><input id="er-hospital" class="ad-in" value="${esc(r.hospital || '')}"></div>
+                <div><label>Blood group</label><select id="er-blood" class="ad-in">${['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(b => `<option>${b}</option>`).join('')}</select></div>
+                <div><label>District</label><select id="er-loc" class="ad-in"><option value="">Select district</option>${districtOptionsHTML}</select></div>
+                <div><label>Contact number</label><input id="er-phone" class="ad-in" value="${esc(r.phone || '')}"></div>
+                <div><label>Needed by</label><input id="er-date" type="date" class="ad-in" value="${esc(r.date || '')}"></div>
+                <label class="ad-chk"><input type="checkbox" id="er-emer" ${r.isEmergency ? 'checked' : ''}>Emergency</label>
+              </div>
+              <div class="ad-mf"><button class="ad-btn" onclick="admCloseModal()">Cancel</button><button class="ad-btn ad-btn-p" id="er-save" onclick="admSaveReq('${id}')">Save changes</button></div>`);
+            $a('er-blood').value = r.blood || 'A+'; $a('er-loc').value = r.location || '';
+        };
+        window.admSaveReq = async (id) => {
+            const r = ADM.reqs.find(x => x.id === id), btn = $a('er-save');
+            const data = { patient: $a('er-patient').value.trim(), problem: $a('er-problem').value.trim(), hospital: $a('er-hospital').value.trim(), blood: $a('er-blood').value, location: $a('er-loc').value, phone: $a('er-phone').value.trim(), date: $a('er-date').value, isEmergency: $a('er-emer').checked };
+            if (!data.patient || !data.phone) return showToast('Name is required');
+            btn.disabled = true;
+            try { await updateDoc(doc(db, 'requests', id), data); Object.assign(r, data); admCloseModal(); admReqsFilter(true); showToast('Request updated'); }
+            catch (e) { console.error(e); showToast('Could not save changes'); btn.disabled = false; }
+        };
+
+        // ---------- Reports ----------
+        window.admRepTab = t => { ADV.reps.tab = t; renderReports(); };
+        function renderReports() {
+            const tab = ADV.reps.tab, R = ADM.reports;
+            const c = { open: R.filter(r => r.status !== 'resolved').length, resolved: R.filter(r => r.status === 'resolved').length, all: R.length };
+            $a('rep-tabs').innerHTML = [['open', 'Open'], ['resolved', 'Resolved'], ['all', 'All']].map(([k, l]) => `<button class="${tab === k ? 'on' : ''}" onclick="admRepTab('${k}')">${l}<em>${c[k]}</em></button>`).join('');
+            const rows = R.filter(r => tab === 'all' || (tab === 'open' ? r.status !== 'resolved' : r.status === 'resolved'));
+            $a('rep-body').innerHTML = rows.map(r => {
+                const t = r.target || {}, isD = r.type === 'donor', done = r.status === 'resolved';
+                const item = isD ? `<b>${esc(t.name || '-')}</b><span>${esc(t.phone || '')} ${esc(t.blood || '')}</span>` : `<b>${esc(t.patient || '-')}</b><span>${esc(t.hospital || '')} ${esc(t.blood || '')} ${esc(t.phone || '')}</span>`;
+                return `<tr>
+                  <td>${pill(isD ? 'Donor' : 'Request', isD ? 't-teal' : 't-amber')}</td>
+                  <td><div class="ad-who"><div>${item}</div></div></td>
+                  <td style="max-width:240px;white-space:normal">${esc(r.reason || '')}</td>
+                  <td>${esc(r.reporterName || '-')}</td>
+                  <td>${fdate(tms(r.createdAt))}</td>
+                  <td>${done ? pill('Resolved', 't-green') : pill('Open', 't-red', 1)}</td>
+                  <td class="r"><button class="ad-ib ok" title="${done ? 'Reopen' : 'Mark resolved'}" onclick="admRepToggle('${r.id}')"><i class="fa-solid fa-${done ? 'rotate-left' : 'check'}"></i></button>${isD && t.uid ? `<button class="ad-ib dg" title="Block member" onclick="admRepBlock('${r.id}')"><i class="fa-solid fa-ban"></i></button>` : ''}${!isD && t.id ? `<button class="ad-ib dg" title="Delete request" onclick="admRepDelReq('${r.id}')"><i class="fa-solid fa-trash-can"></i></button>` : ''}<button class="ad-ib dg" title="Delete" onclick="adminDeleteData('reports','${r.id}')"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
+            }).join('') || '<tr><td colspan="7"><div class="ad-empty">No reports</div></td></tr>';
+        }
+        window.admRepToggle = async id => {
+            const r = ADM.reports.find(x => x.id === id), st = r.status === 'resolved' ? 'open' : 'resolved';
+            try { await updateDoc(doc(db, 'reports', id), { status: st }); r.status = st; renderReports(); updateNavCount(); showToast(st === 'resolved' ? 'Marked as resolved' : 'Report reopened'); }
+            catch (e) { showToast('Error: ' + e.message); }
+        };
+        window.admRepBlock = async id => {
+            const r = ADM.reports.find(x => x.id === id), uid = r?.target?.uid; if (!uid) return;
+            if (!(await admConfirm('Block this member?', 'They will not be able to log in or appear in donor search.', 'Block', true))) return;
+            try {
+                await updateDoc(doc(db, 'users', uid), { blocked: true });
+                await updateDoc(doc(db, 'reports', id), { status: 'resolved' });
+                r.status = 'resolved'; const u = ADM.users.find(x => x.id === uid); if (u) u.blocked = true;
+                renderReports(); updateNavCount(); showToast('Member blocked');
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+        window.admRepDelReq = async id => {
+            const r = ADM.reports.find(x => x.id === id), rid = r?.target?.id; if (!rid) return;
+            if (!(await admConfirm('Delete this request?', 'This cannot be undone.', 'Delete', true))) return;
+            try {
+                await deleteDoc(doc(db, 'requests', rid));
+                await updateDoc(doc(db, 'reports', id), { status: 'resolved' });
+                r.status = 'resolved'; ADM.reqs = ADM.reqs.filter(x => x.id !== rid);
+                renderReports(); updateNavCount(); showToast('Deleted');
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+
+        // ---------- Notices ----------
+        function renderNotices() {
+            $a('notice-list').innerHTML = ADM.notices.map(n => `<div class="ad-card ad-nt">
+                <div class="tx"><b>${esc(n.title)}</b><p>${esc(n.body)}</p>${n.titleBn || n.bodyBn ? `<p class="bn">${esc(n.titleBn || '')} ${esc(n.bodyBn || '')}</p>` : ''}<small>${fdate(tms(n.createdAt))}</small></div>
+                ${pill(n.active ? 'Visible' : 'Hidden', n.active ? 't-green' : 't-gray', 1)}
+                <button class="ad-ib" title="${n.active ? 'Hide' : 'Show'}" onclick="admNoticeToggle('${n.id}')"><i class="fa-solid fa-${n.active ? 'eye-slash' : 'eye'}"></i></button>
+                <button class="ad-ib dg" title="Delete" onclick="adminDeleteData('announcements','${n.id}')"><i class="fa-solid fa-trash"></i></button></div>`).join('') || '<div class="ad-empty">No notices yet</div>';
+        }
+        window.adminAddNotice = async () => {
+            const title = $a('nt-title').value.trim(), body = $a('nt-body').value.trim(), titleBn = $a('nt-title-bn').value.trim(), bodyBn = $a('nt-body-bn').value.trim();
+            if (!title || !body) return showToast('Title and message are required');
+            try {
+                await addDoc(collection(db, 'announcements'), { title, body, titleBn, bodyBn, emergency: !!$a('nt-emer').checked, active: true, createdAt: new Date() }); $a('nt-emer').checked = false;
+                ['nt-title', 'nt-body', 'nt-title-bn', 'nt-body-bn'].forEach(i => $a(i).value = '');
+                showToast('Notice published'); await admLoad('notices', true); renderNotices();
+            } catch (e) { console.error(e); showToast('Error: ' + (e.code === 'permission-denied' ? 'Firestore rules block this write (permission-denied). See README.' : e.message)); }
+        };
+        window.admNoticeToggle = async id => {
+            const n = ADM.notices.find(x => x.id === id);
+            try { await updateDoc(doc(db, 'announcements', id), { active: !n.active }); n.active = !n.active; renderNotices(); showToast('Notice updated'); }
+            catch (e) { showToast('Error: ' + e.message); }
+        };
+
+        // ---------- Overview extras ----------
+        function renderDashExtra() {
+            const R = ADM.reqs, U = ADM.users;
+            const openRep = ADM.reports.filter(r => r.status !== 'resolved').length, blocked = U.filter(u => u.blocked).length;
+            const k = (cls, ic, label, val, sub) => `<div class="ad-kpi"><div class="ic ${cls}"><i class="fa-solid ${ic}"></i></div><div><p>${label}</p><b>${val}</b><small>${sub}</small></div></div>`;
+            $a('ad-kpis').insertAdjacentHTML('beforeend', k('t-red', 'fa-flag', 'Open reports', openRep, 'needs review') + k('t-gray', 'fa-ban', 'Blocked members', blocked, 'suspended accounts'));
+            const byD = {}; R.forEach(r => { if (r.location) byD[r.location] = (byD[r.location] || 0) + 1; });
+            const top = Object.entries(byD).sort((a, b) => b[1] - a[1]).slice(0, 6), mx = Math.max(1, ...top.map(x => x[1]));
+            $a('ad-top-dist').innerHTML = top.map(([d, n]) => `<div class="ad-brow" style="grid-template-columns:96px 1fr 34px"><b style="color:#5A1015;font-weight:600">${esc(d)}</b><div class="ad-track"><div style="width:${n / mx * 100}%"></div></div><span>${n}</span></div>`).join('') || '<div class="ad-empty">No requests yet</div>';
+            const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i); days.push(d); }
+            const cnt = days.map(d => { const a = d.getTime(), b = a + 86400000; return R.filter(r => { const t = tms(r.createdAt); return t >= a && t < b; }).length; });
+            const m2 = Math.max(1, ...cnt);
+            $a('ad-week').innerHTML = '<div class="ad-week">' + days.map((d, i) => `<div class="wk"><span>${cnt[i]}</span><i style="height:${Math.max(4, cnt[i] / m2 * 84)}px"></i><em>${d.toLocaleDateString('en-GB', { weekday: 'short' })}</em></div>`).join('') + '</div>';
+        }
+        const _renderDash = renderDash;
+        renderDash = function () { _renderDash(); renderDashExtra(); };
+
+        // ---------- Delete / modal helpers ----------
+        window.adminDeleteData = async (col, id) => {
+            const label = { users: 'member', requests: 'request', team: 'team member', reports: 'report', announcements: 'notice' }[col];
+            const note = col === 'users' ? 'Their profile record is removed. Their login account is not deleted.' : 'This cannot be undone.';
+            if (!(await admConfirm('Delete this ' + label + '?', note, 'Delete', true))) return;
+            try {
+                await deleteDoc(doc(db, col, id));
+                const key = { users: 'users', requests: 'reqs', team: 'team', reports: 'reports', announcements: 'notices' }[col];
+                ADM[key] = ADM[key].filter(x => x.id !== id);
+                showToast('Deleted');
+                if (col === 'users') admUsersFilter(true); else if (col === 'requests') admReqsFilter(true); else if (col === 'reports') renderReports(); else if (col === 'announcements') renderNotices(); else renderTeam();
+                updateNavCount();
+            } catch (e) { showToast('Error: ' + e.message); }
+        };
+        function admModal(html) { $a('ad-modal-box').innerHTML = html; $a('ad-modal').classList.remove('hidden'); }
+        window.admCloseModal = () => { $a('ad-modal').classList.add('hidden'); if (window._admResolve) { window._admResolve(false); window._admResolve = null; } };
+        function admConfirm(title, msg, label, danger) {
+            return new Promise(res => {
+                admModal(`<div class="ad-mh"><h3>${esc(title)}</h3><p>${esc(msg)}</p></div><div class="ad-mf"><button class="ad-btn" onclick="admCloseModal()">Cancel</button><button class="ad-btn ${danger ? 'ad-btn-d' : 'ad-btn-p'}" onclick="admConfirmYes()">${esc(label)}</button></div>`);
+                window._admResolve = res;
+            });
+        }
+        window.admConfirmYes = () => { const r = window._admResolve; window._admResolve = null; $a('ad-modal').classList.add('hidden'); if (r) r(true); };
+
+        // ---------- CSV export ----------
+        window.admExport = (kind) => {
+            let rows, cols;
+            if (kind === 'users') { rows = ADV.users.rows; cols = ['name', 'email', 'phone', 'blood', 'role', 'gender', 'district', 'available', 'verified', 'blocked', 'donationCount']; }
+            else if (kind === 'dons') {
+                rows = ADV.dons.rows.map(d => ({ date: fdate(tms(d.date)), donor: d.donor?.name || '', phone: d.donor?.phone || '', blood: d.donor?.blood || '', patient: d.patient || '', status: d.status || '' }));
+                cols = ['date', 'donor', 'phone', 'blood', 'patient', 'status'];
+            } else { rows = ADV.reqs.rows; cols = ['patient', 'blood', 'hospital', 'location', 'phone', 'date', 'status', 'isEmergency']; }
+            const cell = v => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+            const csv = [cols.join(','), ...rows.map(r => cols.map(c => cell(r[c])).join(','))].join('\n');
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+            a.download = 'kapilmuni-' + kind + '-' + new Date().toISOString().slice(0, 10) + '.csv';
+            document.body.appendChild(a); a.click(); a.remove(); showToast('Exported ' + rows.length + ' rows');
+        };
+
+        (function boot() {
+            const splash = document.getElementById('splash');
+            const hide = () => { splash.style.opacity = '0'; setTimeout(() => splash.style.display = 'none', 400); };
+            let done = false;
+            onAuthStateChanged(auth, u => {
+                if (done) return; done = true;
+                if (u && u.email === ADMIN_EMAIL) { currentUserData = { name: 'Administrator', email: u.email }; sessionStorage.setItem('lb_admin', '1'); showAdminPanel(); }
+                else { sessionStorage.removeItem('lb_admin'); if (u) signOut(auth).catch(() => {}); document.getElementById('login-page').classList.remove('hidden'); }
+                hide();
+            });
+        })();
+    </script>
+<style>body{font-size:15.5px}.ad-nav button{font-size:15px!important;padding:12px 14px!important}.ad-nav p{font-size:11.5px!important}table td{font-size:14.5px!important}table th{font-size:12.5px!important}.ad-in{font-size:15px!important}
+.kxa{background:#fff;border:1px solid #f3c4c4;border-radius:14px;padding:16px;margin-bottom:16px}.kxa h3{font-weight:800;color:#B71C1C;margin-bottom:6px;font-size:17px}.kxa p{font-size:13px;color:#777;margin-bottom:10px}.kxa label{display:block;font-size:12.5px;font-weight:700;margin:6px 0 3px;color:#555}.kxa .ad-in{margin-bottom:8px}.kxb{background:#D32F2F;color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:700;margin-top:4px;font-size:14px}.kxr{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #eee;font-size:14px}.kxr img{height:46px;border-radius:8px}.kxr b{flex:1}.kxl{background:#e53935;color:#fff;font-size:10px;border-radius:6px;padding:1px 6px;vertical-align:middle}.ad-nav button{transition:transform .2s,background .2s}.ad-nav button:hover{transform:translateX(5px)}.ad-view{animation:kxu .45s both}@keyframes kxu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.ad-nav button.on i{animation:kxp 1.6s infinite}@keyframes kxp{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}.kxl{animation:kxp 1.4s infinite}.kxa{animation:kxu .5s both}</style><script type="module">
+import {getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getFirestore,collection,addDoc,getDocs,getDoc,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db=getFirestore(getApp()),$=i=>document.getElementById(i),T=m=>window.showToast?showToast(m):alert(m);
+const img=(f,w,q=.82)=>new Promise(r=>{if(!f)return r('');const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,w/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL(f.type==='image/png'?'image/png':'image/jpeg',q))};i.src=fr.result};fr.readAsDataURL(f)});
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ts=v=>v?.seconds?v.seconds*1000:(v?.toDate?v.toDate().getTime():0),ago=v=>{const m=Math.floor((Date.now()-ts(v))/6e4);return !ts(v)?'':m<1?'just now':m<60?m+' min ago':m<1440?Math.floor(m/60)+' h ago':Math.floor(m/1440)+' d ago'};
+const row=(h,s)=>`<div class="kxr"><b>${h}</b><span style="color:#888;font-size:12px">${s}</span></div>`;
+async function lists(){try{let s=await getDocs(collection(db,'banners'));$('kb-list').innerHTML=s.docs.map(d=>`<div class="kxr"><img src="${d.data().image}"><b>${esc(d.data().link||'')}</b><button class="kxb" style="background:#777" onclick="kxDel('banners','${d.id}')">Delete</button></div>`).join('');
+ s=await getDocs(collection(db,'popups'));$('kp-list').innerHTML=s.docs.map(d=>`<div class="kxr">${d.data().image?`<img src="${d.data().image}">`:''}<b>${esc(d.data().text||'')}</b><button class="kxb" style="background:#777" onclick="kxDel('popups','${d.id}')">Delete</button></div>`).join('');
+ s=await getDocs(collection(db,'team'));$('km-list').innerHTML=s.docs.map(d=>`<div class="kxr"><img src="${d.data().image||''}" style="width:46px;object-fit:cover;border-radius:50%"><b>${esc(d.data().name)} — ${esc(d.data().role)}</b><button class="kxb" style="background:#777" onclick="kxDel('team','${d.id}')">Delete</button></div>`).join('');
+ const st=await getDoc(doc(db,'settings','site'));if(st.exists()){const v=st.data();$('ks-name').value=v.name||'';$('ks-dom').value=v.domain||'';if(v.logo){$('ks-prev').src=v.logo;$('ks-prev').style.display='block'}}
+ const cd=await getDoc(doc(db,'settings','card'));if(cd.exists()){$('kc-name').value=cd.data().presidentName||'Nahidul Hasan Munna';$('kc-sec').value=cd.data().secretaryName||''}}catch(e){console.error(e)}}
+window.kxDel=async(c,i)=>{if(!confirm('Delete?'))return;await deleteDoc(doc(db,c,i));lists()};
+window.kxSaveSite=async()=>{const o={name:$('ks-name').value.trim(),domain:$('ks-dom').value.trim()};const f=$('ks-logo').files[0];if(f)o.logo=await img(f,256,.9);await setDoc(doc(db,'settings','site'),o,{merge:true});T('Website settings saved');lists()};
+window.kxAddBan=async()=>{try{const f=$('kb-file').files[0],u=($('kb-url').value||'').trim();if(!f&&!/^https?:\/\//i.test(u))return T('Choose an image or paste a valid https link');if((await getDocs(collection(db,'banners'))).size>=6)return T('Maximum 6 banners');await addDoc(collection(db,'banners'),{image:f?await img(f,1100):u,link:$('kb-link').value.trim(),active:true,order:Date.now()});$('kb-file').value='';$('kb-url').value='';T('Banner added');lists()}catch(e){console.error(e);T('Error: '+(e.code==='permission-denied'?'Firestore rules block this write (permission-denied). See README.':e.message))}};
+window.kxAddPop=async()=>{const f=$('kp-file').files[0],t=$('kp-text').value.trim();if(!f&&!t)return T('Add text or image');if((await getDocs(collection(db,'popups'))).size>=3)return T('Maximum 3 popups');await addDoc(collection(db,'popups'),{text:t,image:await img(f,900),active:true,order:Date.now()});$('kp-text').value='';$('kp-file').value='';T('Popup added');lists()};
+window.kxSaveCard=async()=>{const o={presidentName:$('kc-name').value.trim()||'Nahidul Hasan Munna',secretaryName:$('kc-sec').value.trim()};let f=$('kc-sig').files[0];if(f)o.signature=await img(f,400,.92);f=$('kc-ssig').files[0];if(f)o.secretarySig=await img(f,400,.92);await setDoc(doc(db,'settings','card'),o,{merge:true});T('Saved')};
+window.kxAddMem=async()=>{const n=$('km-name').value.trim(),r=$('km-role').value.trim();if(!n||!r)return T('Name and role required');await addDoc(collection(db,'team'),{name:n,role:r,image:await img($('km-img').files[0],400),signature:await img($('km-sig').files[0],400,.92)});['km-name','km-role','km-img','km-sig'].forEach(i=>$(i).value='');T('Member added');lists()};
+/* realtime */
+let tm=null;const first={};
+const bump=()=>{clearTimeout(tm);tm=setTimeout(()=>{const ae=document.activeElement;if(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName))return;if(window.__ADM&&!['site','live'].includes(window.admView)){__ADM.loaded={};window.adminNav(window.admView||'dash')}},1500)};
+const watch=(c,fn)=>{try{onSnapshot(collection(db,c),s=>{fn&&fn(s.docs.map(d=>({id:d.id,...d.data()})));if(first[c])bump();first[c]=1},()=>{})}catch(e){}};
+let U=[],R=[],D=[];
+const paint=()=>{$('lv-u').innerHTML=[...U].sort((a,b)=>ts(b.createdAt)-ts(a.createdAt)).slice(0,12).map(u=>row(esc(u.name)+' <span class="kxl">'+esc(u.blood||'')+'</span>',esc(u.district||'')+' · '+ago(u.createdAt))).join('')||row('No members','');
+ $('lv-r').innerHTML=[...R].sort((a,b)=>ts(b.createdAt)-ts(a.createdAt)).slice(0,12).map(r=>row(esc(r.patient||'Patient')+' — '+esc(r.bloodGroup||r.blood||'')+(r.isEmergency?' <span class="kxl">URGENT</span>':''),esc(r.hospital||'')+' · '+ago(r.createdAt))).join('')||row('No requests','');
+ $('lv-d').innerHTML=[...D].sort((a,b)=>ts(b.date)-ts(a.date)).slice(0,10).map(d=>row('Donation recorded — '+esc(d.patient||''),ago(d.date))).join('')||row('No donations','')};
+watch('users',x=>{U=x;paint()});watch('requests',x=>{R=x;paint()});watch('donations',x=>{D=x;paint()});['reports','announcements','team'].forEach(c=>watch(c));
+onSnapshot(doc(db,'settings','site'),()=>{},()=>{});
+lists();
+</script><style>html,body{max-width:none!important;overflow-x:hidden}.on-r,.ch-r{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f3dede;font-size:14px}.ch-r{cursor:pointer}.on-r i,.dt{width:11px;height:11px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px #22C55E;flex:none;display:inline-block}.on-r span,.ch-r span{color:#777;font-size:12.5px}.ch-r div{flex:1;min-width:0}.ch-r b{display:block}.ch-r em{font-style:normal;color:#777;font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cm{margin:6px 0;padding:8px 12px;border-radius:12px;background:#FFF1F1;font-size:14px;display:flex;gap:8px;align-items:flex-start}.cm div{flex:1}.cm small{color:#888;display:block;font-size:11px}.cm button,.cdel{border:0;background:#D32F2F;color:#fff;border-radius:8px;padding:4px 10px;font-size:12px}.cdel{margin:8px 0;padding:8px 14px}</style>
+<script type="module">
+import {getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getFirestore,collection,doc,getDocs,setDoc,deleteDoc,onSnapshot,query,orderBy} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const db=getFirestore(getApp()),$=i=>document.getElementById(i);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let US=[],CH=[];
+const on=u=>u.online===true&&Date.now()-(u.lastSeenMs||0)<80000;
+const tm=ms=>ms?new Date(ms).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+let lastW=0;function pub(){if(Date.now()-lastW<45000||!US.length)return;lastW=Date.now();setDoc(doc(db,'stats','public'),{total:US.length,donors:US.filter(u=>u.role==='donor').length,receivers:US.filter(u=>u.role==='receiver').length,online:US.filter(on).length,updatedAt:Date.now()}).catch(()=>{})}
+function paint(){pub();const o=US.filter(on);$('on-n').textContent=o.length;$('on-list').innerHTML=o.map(u=>`<div class="on-r"><i></i><b>${esc(u.name)}</b><span>${esc(u.blood||'')} · ${esc(u.district||'')} · ${esc(u.phone||'')}</span></div>`).join('')||'<div class="ad-empty">Nobody online right now</div>';
+ $('ch-list').innerHTML=CH.map(c=>`<div class="ch-r" onclick="kxOpenChat('${c.id}')"><div><b>${esc(Object.values(c.names||{}).join(' ⇄ '))}</b><em>${esc(c.last||'')}</em></div><span>${tm(c.lastAt)}</span></div>`).join('')||'<div class="ad-empty">No conversations yet</div>'}
+try{onSnapshot(collection(db,'users'),s=>{US=s.docs.map(d=>d.data());paint()},()=>{})}catch(e){}
+try{onSnapshot(collection(db,'chats'),s=>{CH=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.lastAt||0)-(a.lastAt||0));paint()},()=>{})}catch(e){}
+setInterval(paint,20000);
+window.kxOpenChat=async id=>{const v=$('ch-view');v.innerHTML='Loading…';try{const s=await getDocs(query(collection(db,'chats',id,'messages'),orderBy('at')));
+ v.innerHTML=`<button class="cdel" onclick="kxDelChat('${id}')">Delete whole chat</button>`+s.docs.map(d=>{const m=d.data();return`<div class="cm"><div><small>${esc((CH.find(c=>c.id===id)||{names:{}}).names[m.from]||m.from)} · ${tm(m.at)}</small>${esc(m.text)}</div><button onclick="kxDelMsg('${id}','${d.id}')">Delete</button></div>`}).join('')||'<div class="ad-empty">No messages</div>';v.scrollIntoView({behavior:'smooth'})}catch(e){v.innerHTML='Could not load messages (check Firestore rules).'}};
+window.kxDelMsg=async(c,m)=>{if(!confirm('Delete this message?'))return;await deleteDoc(doc(db,'chats',c,'messages',m));kxOpenChat(c)};
+window.kxDelChat=async c=>{if(!confirm('Delete this whole chat?'))return;const s=await getDocs(collection(db,'chats',c,'messages'));await Promise.all(s.docs.map(d=>deleteDoc(d.ref)));await deleteDoc(doc(db,'chats',c));$('ch-view').innerHTML=''};
+</script>
+<style>.kxn{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-top:1px solid #eee}.kxn.off{opacity:.55}.kxn.em .kxn-b b{color:#C62828}
+.kxn-b{flex:1;min-width:0}.kxn-b b{display:block;font-size:14.5px}.kxn-b span{display:block;font-size:13px;color:#555;margin-top:2px;white-space:pre-wrap;word-break:break-word}.kxn-b small{display:block;font-size:11.5px;color:#999;margin-top:3px}.kxn-b u{text-decoration:none;color:#16a34a;font-weight:700}
+.kxn-a{display:flex;gap:6px;flex:none}
+.kxa-st{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-bottom:12px}.kxa-st>div{background:#fff;border:1px solid #f3c4c4;border-radius:14px;padding:12px;text-align:center}.kxa-st i{color:#D32F2F;font-size:17px}.kxa-st b{display:block;font-size:22px;font-weight:800;color:#222;margin-top:2px}.kxa-st span{font-size:11.5px;color:#777}
+.kxa-ch{display:flex;flex-wrap:wrap;gap:7px;max-height:210px;overflow:auto}.kxa-ch button{border:1px solid #f3c4c4;background:#fff7f7;border-radius:20px;padding:6px 12px;font-size:12.5px;font-weight:600;color:#7f1d1d}.kxa-ch button em{font-style:normal;background:#D32F2F;color:#fff;border-radius:10px;padding:0 7px;margin-left:4px;font-size:11px}.kxa-ch button small{color:#999;margin-left:6px;font-size:10.5px}.kxa-ch .all{background:#D32F2F;color:#fff}
+.kxa-ini{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#F8C4C4;color:#7f1d1d;font-weight:800;flex:none}
+#kxa-md{position:fixed;inset:0;background:#0008;z-index:9000;display:none;align-items:center;justify-content:center;padding:14px}#kxa-md.on{display:flex}
+.kxa-mb{position:relative;background:#fff;border-radius:18px;max-width:460px;width:100%;max-height:90vh;overflow:auto;padding:20px}.kxa-x{position:absolute;right:12px;top:8px;border:0;background:none;font-size:26px;color:#888}
+.kxa-pt{display:flex;gap:14px;align-items:center;margin-bottom:10px}.kxa-pt h3{font-size:19px;font-weight:800}.kxa-bd{background:#D32F2F;color:#fff;border-radius:8px;padding:1px 9px;font-weight:800;font-size:13px}.kxa-rl{background:#f1f1f1;border-radius:8px;padding:1px 9px;font-size:12px;text-transform:capitalize}
+.kxa-pr{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid #f3f3f3;font-size:14px}.kxa-pr span{color:#888}.kxa-pr b{text-align:right;word-break:break-word}
+.kxa-pa{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.kxa-pa .kxb{text-decoration:none;display:inline-block}
+.kxa-crh{display:flex;gap:12px;align-items:center}.kxa-crh b{display:block;font-size:15.5px}.kxa-crh span,.kxa-crh small{display:block;font-size:12.5px;color:#777}
+.kxa-p{border-radius:20px;padding:3px 12px;font-size:12px;font-weight:800}.kxa-p.g{background:#dcfce7;color:#166534}.kxa-p.r{background:#fee2e2;color:#991b1b}.kxa-p.y{background:#fef3c7;color:#92400e}
+.kxa-ck{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.kxa-ck span{background:#f6f6f6;border-radius:8px;padding:4px 10px;font-size:12.5px;color:#555}.kxa-ck .ok{background:#dcfce7;color:#166534}.kxa-ck .warn{background:#fee2e2;color:#991b1b}
+.kxa-rs{background:#fff7f7;border-left:4px solid #D32F2F;border-radius:8px;padding:9px 12px}.kxa-rs b{font-size:12px;color:#B71C1C}.kxa-rs p{font-size:14px;margin-top:3px;white-space:pre-wrap;word-break:break-word}
+.kxa-rj{margin-top:8px;font-size:13px;color:#991b1b}
+.kxa-rd{display:flex;gap:10px;align-items:center;padding:8px 4px;font-size:14px;border-top:1px solid #f3f3f3}
+#cr-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}#cr-tabs button{border:1px solid #f3c4c4;background:#fff;border-radius:20px;padding:7px 14px;font-weight:700;font-size:13px;color:#7f1d1d}#cr-tabs button.on{background:#D32F2F;color:#fff}#cr-tabs em{font-style:normal;margin-left:6px;opacity:.8}
+</style>
+<script type="module">
+import {getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const app=getApp(),auth=getAuth(app),db=getFirestore(app),$=i=>document.getElementById(i);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=m=>window.showToast?window.showToast(m):alert(m);
+const ms=x=>!x?0:x.toMillis?x.toMillis():x.seconds?x.seconds*1000:(+x||0);
+const fdt=t=>t?new Date(t).toLocaleString([],{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-';
+const fd=t=>t?new Date(t).toLocaleDateString([],{day:'numeric',month:'short',year:'numeric'}):'-';
+const pic=u=>(u&&(u.cardPhoto||u.photoURL))||'';
+const ava=(u,s=44)=>pic(u)?`<img src="${esc(pic(u))}" style="width:${s}px;height:${s}px;border-radius:50%;object-fit:cover">`:`<span class="kxa-ini" style="width:${s}px;height:${s}px;font-size:${s/2.6}px">${esc(String((u&&u.name)||'?').trim().charAt(0).toUpperCase())}</span>`;
+let US=[],NT=[],CR=[],TM=[],started=false,crTab='pending';
+window.kxaGetUser=id=>US.find(x=>x.id===id);
+window.kxaBan=async id=>{const u=US.find(x=>x.id===id);if(!u)return;const bl=u.blocked===true;if(!confirm((bl?'Unban ':'Ban ')+(u.name||'this member')+'?'+(bl?'':' They will see a ban screen and can contact you through Live support.')))return;try{await updateDoc(doc(db,'users',id),{blocked:!bl});toast(bl?'Account unbanned':'Account banned');kxaClose()}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxaRemove=async id=>{const u=US.find(x=>x.id===id);if(!u)return;if(!confirm('REMOVE '+(u.name||'this member')+' permanently? Their profile will disappear from the donor and member lists.'))return;if(!confirm('Are you sure? This cannot be undone.'))return;try{await deleteDoc(doc(db,'users',id));toast('Member removed');kxaClose()}catch(e){toast('Failed: '+(e.code||e.message))}};
+
+/* ================= NOTICES (bar + all-member) ================= */
+function noticeUI(p,emer){let editing=null;
+ const g=i=>$(p+'-'+i);
+ const rows=()=>NT.filter(n=>!!n.emergency===emer).sort((a,b)=>ms(b.createdAt)-ms(a.createdAt));
+ const paint=()=>{const el=g('list');if(!el)return;const r=rows();
+  el.innerHTML=r.map(n=>`<div class="kxn${n.active?'':' off'}${emer?' em':''}"><div class="kxn-b"><b>${esc(n.title||'(no title)')}</b><span>${esc(n.body||'')}</span><small>${fdt(ms(n.createdAt))}${n.active?' · <u>showing</u>':' · hidden'}</small></div><div class="kxn-a"><button class="ad-ib" title="Edit" onclick="kxnEdit('${p}','${n.id}')"><i class="fa-solid fa-pen"></i></button><button class="ad-ib" title="${n.active?'Hide from members':'Show to members'}" onclick="kxnTog('${n.id}')"><i class="fa-solid fa-${n.active?'eye-slash':'eye'}"></i></button><button class="ad-ib dg" title="Delete" onclick="kxnDel('${n.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`).join('')||'<div class="ad-empty">No notices yet</div>';
+  g('cnt').textContent=r.filter(n=>n.active).length};
+ const reset=()=>{editing=null;['t','tb','b','bb'].forEach(i=>g(i).value='');g('go').textContent=emer?'Send to all members':'Publish notice';g('cx').style.display='none';g('ft').textContent=emer?'New all-member notice':'New notice'};
+ return{paint,
+  edit:id=>{const n=NT.find(x=>x.id===id);if(!n)return;editing=id;g('t').value=n.title||'';g('tb').value=n.titleBn||'';g('b').value=n.body||'';g('bb').value=n.bodyBn||'';g('go').textContent='Save changes';g('cx').style.display='';g('ft').textContent='Edit notice';g('t').scrollIntoView({behavior:'smooth',block:'center'})},
+  cancel:reset,
+  save:async()=>{const o={title:g('t').value.trim(),body:g('b').value.trim(),titleBn:g('tb').value.trim(),bodyBn:g('bb').value.trim()};
+   if(!o.title&&!o.body)return toast('Write a title or a message');
+   if(emer&&!editing&&!confirm('Send this emergency notice to EVERY member now?'))return;
+   g('go').disabled=true;
+   try{if(editing){await updateDoc(doc(db,'announcements',editing),o);toast('Notice updated')}else{await addDoc(collection(db,'announcements'),{...o,emergency:emer,active:true,createdAt:new Date()});toast(emer?'Sent to all members':'Notice published')}reset()}
+   catch(e){toast('Failed: '+(e.code||e.message))}g('go').disabled=false}}}
+const NU={nb:noticeUI('nb',false),na:noticeUI('na',true)};
+window.kxnSave=p=>NU[p].save();window.kxnCancel=p=>NU[p].cancel();window.kxnEdit=(p,id)=>NU[p].edit(id);
+window.kxnTog=async id=>{const n=NT.find(x=>x.id===id);if(!n)return;try{await updateDoc(doc(db,'announcements',id),{active:!n.active});toast(n.active?'Hidden from members':'Showing to members')}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxnDel=async id=>{if(!confirm('Delete this notice permanently?'))return;try{await deleteDoc(doc(db,'announcements',id));toast('Deleted')}catch(e){toast('Failed: '+(e.code||e.message))}};
+
+/* ================= MEMBERS: stats + profile ================= */
+function uStats(){const el=$('kxa-ustats');if(!el)return;if(!US.length){el.innerHTML='';return}
+ const donors=US.filter(u=>u.role==='donor').length,rec=US.filter(u=>u.role==='receiver').length,av=US.filter(u=>u.available).length,
+  on=US.filter(u=>u.online===true&&Date.now()-(u.lastSeenMs||0)<80000).length,vf=US.filter(u=>u.verified).length,bl=US.filter(u=>u.blocked).length;
+ const D={};US.forEach(u=>{const k=u.district||'Unknown';(D[k]=D[k]||{n:0,d:0,r:0});D[k].n++;if(u.role==='donor')D[k].d++;if(u.role==='receiver')D[k].r++});
+ const ds=Object.entries(D).sort((a,b)=>b[1].n-a[1].n);
+ const st=[['Registered',US.length,'fa-users'],['Donors',donors,'fa-droplet'],['Receivers',rec,'fa-hand-holding-medical'],['Available now',av,'fa-circle-check'],['Online now',on,'fa-signal'],['Verified',vf,'fa-certificate'],['Blocked',bl,'fa-ban'],['Community team',TM.length,'fa-user-shield'],['Districts',ds.filter(x=>x[0]!=='Unknown').length,'fa-location-dot']];
+ el.innerHTML=`<div class="kxa-st">${st.map(s=>`<div><i class="fa-solid ${s[2]}"></i><b>${s[1]}</b><span>${s[0]}</span></div>`).join('')}</div><div class="kxa" style="margin-bottom:12px"><h3 style="font-size:15px">Members by district <span class="kxl">LIVE</span></h3><p>Tap a district to filter the list below.</p><div class="kxa-ch"><button onclick="kxaDist('')" class="all">All</button>${ds.map(([k,v])=>`<button onclick="kxaDist('${esc(k).replace(/'/g,'')}')">${esc(k)} <em>${v.n}</em><small>D${v.d} · R${v.r}</small></button>`).join('')}</div></div>`}
+window.kxaDist=d=>{const q=$('u-q');if(q){q.value=d;window.admUsersFilter&&window.admUsersFilter();q.scrollIntoView({behavior:'smooth',block:'center'})}};
+function modal(h){let m=$('kxa-md');if(!m){m=document.createElement('div');m.id='kxa-md';m.onclick=e=>{if(e.target===m)m.classList.remove('on')};document.body.appendChild(m)}m.innerHTML='<div class="kxa-mb">'+h+'</div>';m.classList.add('on')}
+window.kxaClose=()=>{const m=$('kxa-md');m&&m.classList.remove('on')};
+const row=(a,b)=>`<div class="kxa-pr"><span>${a}</span><b>${b}</b></div>`;
+window.kxaProfile=id=>{const u=US.find(x=>x.id===id);if(!u)return;const cr=CR.find(c=>c.uid===id),on=u.online===true&&Date.now()-(u.lastSeenMs||0)<80000,ph=String(u.phone||'').replace(/\D/g,'');
+ modal(`<button class="kxa-x" onclick="kxaClose()">×</button><div class="kxa-pt">${ava(u,84)}<div><h3>${esc(u.name||'No name')}</h3><span class="kxa-bd">${esc(u.blood||'-')}</span> <span class="kxa-rl">${esc(u.role||'user')}</span><div style="margin-top:4px;font-size:12.5px;color:${on?'#16a34a':'#888'}">${on?'● Online now':'Last seen '+(u.lastSeenMs?fdt(u.lastSeenMs):'-')}</div></div></div>`
+  +row('Phone',esc(u.phone||'-'))+row('Email',esc(u.email||'-'))+row('District',esc(u.district||'-'))+row('Gender',esc(u.gender||'-'))
+  +row('Donations',(u.donationCount||0)+' time(s)')+row('Available to donate',u.available?'Yes':'No')+row('Verified donor',u.verified?'Yes':'No')+row('Account',u.blocked?'<span style="color:#C62828">Blocked</span>':'Active')
+  +row('Joined',fdt(ms(u.createdAt)))+row('ID card',u.cardApproved?'Approved by admin':(u.donationCount||0)>=2?'Unlocked (2+ donations)':'Locked')+(cr?row('ID card request',esc(cr.status)):'')
+  +`<div class="kxa-pa">${ph?`<a class="kxb" href="tel:${esc(u.phone)}">Call</a><a class="kxb" style="background:#16a34a" target="_blank" rel="noopener" href="https://wa.me/${ph.startsWith('880')?ph:'880'+ph.replace(/^0/,'')}">WhatsApp</a>`:''}<button class="kxb" style="background:#C62828" onclick="kxaBan('${esc(id)}')">${u.blocked?'Unban':'Ban'}</button><button class="kxb" style="background:#444" onclick="kxaRemove('${esc(id)}')">Remove member</button><button class="kxb" style="background:#777" onclick="kxaClose()">Close</button></div>`)};
+
+/* ================= ID CARD REQUESTS ================= */
+const REASONS=['The reason is not clear or not valid','Not enough blood donation record','Profile information is incomplete or wrong','Profile photo is missing or unclear','Duplicate request','Suspicious or fake information','Other (write below)'];
+function crPaint(){const el=$('cr-list');if(!el)return;
+ const cnt=s=>CR.filter(r=>r.status===s).length,pend=cnt('pending');
+ const nb=$('nav-cardreq-count');if(nb){nb.textContent=pend;nb.classList.toggle('hidden',!pend)}
+ $('cr-tabs').innerHTML=[['pending','Pending'],['approved','Approved'],['rejected','Rejected'],['all','All']].map(([k,l])=>`<button class="${crTab===k?'on':''}" onclick="kxaCrTab('${k}')">${l}<em>${k==='all'?CR.length:cnt(k)}</em></button>`).join('');
+ const r=CR.filter(x=>crTab==='all'||x.status===crTab).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+ el.innerHTML=r.map(x=>{const u=US.find(y=>y.id===x.uid)||{},dc=Number(u.donationCount!=null?u.donationCount:x.donationCount||0);
+  const pill=x.status==='approved'?'<span class="kxa-p g">Approved</span>':x.status==='rejected'?'<span class="kxa-p r">Rejected</span>':'<span class="kxa-p y">Pending</span>';
+  return`<div class="kxa kxa-cr"><div class="kxa-crh">${ava(u.name?u:x,50)}<div style="flex:1;min-width:0"><b>${esc(x.name||u.name||'')}</b><span>${esc(x.blood||u.blood||'')} · ${esc(x.role||u.role||'')} · ${esc(x.district||u.district||'-')}</span><small>${esc(x.phone||u.phone||'')} · requested ${fdt(x.createdAt)}</small></div>${pill}</div>
+  <div class="kxa-ck"><span class="${dc>=2?'ok':'warn'}"><i class="fa-solid fa-droplet"></i> Donations: ${dc} / 2</span><span class="${u.verified?'ok':''}"><i class="fa-solid fa-certificate"></i> ${u.verified?'Verified donor':'Not verified'}</span><span class="${u.blocked?'warn':''}"><i class="fa-solid fa-user-shield"></i> ${u.blocked?'Account blocked':'Account active'}</span><span><i class="fa-solid fa-calendar"></i> Joined ${fd(ms(u.createdAt))}</span></div>
+  <div class="kxa-rs"><b>Why they need the ID card</b><p>${esc(x.reason||'')}</p></div>
+  ${x.status==='rejected'?`<div class="kxa-rj"><b>Rejected:</b> ${esc(x.rejectReason||'')}${x.rejectNote?' — '+esc(x.rejectNote):''}</div>`:''}
+  <div class="kxa-pa"><button class="kxb" style="background:#555" onclick="kxaProfile('${esc(x.uid)}')">View profile</button>${x.status!=='approved'?`<button class="kxb" style="background:#16a34a" onclick="kxaCrOk('${esc(x.id)}')">Approve</button>`:''}${x.status==='pending'?`<button class="kxb" onclick="kxaCrNo('${esc(x.id)}')">Reject…</button>`:''}${x.status==='approved'?`<button class="kxb" onclick="kxaCrRevoke('${esc(x.id)}')">Revoke</button>`:''}${x.status==='rejected'?`<button class="kxb" style="background:#16a34a" onclick="kxaCrOk('${esc(x.id)}')">Approve anyway</button>`:''}</div></div>`}).join('')||'<div class="ad-empty">No requests here</div>'}
+window.kxaCrTab=t=>{crTab=t;crPaint()};
+window.kxaCrOk=async id=>{const r=CR.find(x=>x.id===id);if(!r)return;if(!confirm('Approve the ID card for '+(r.name||'this member')+'? They will see their card immediately.'))return;
+ try{await updateDoc(doc(db,'users',r.uid),{cardApproved:true,cardApprovedAt:Date.now()});await updateDoc(doc(db,'cardRequests',id),{status:'approved',reviewedAt:Date.now(),rejectReason:'',rejectNote:''});toast('Approved — the card is now open for the member')}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxaCrNo=id=>{const r=CR.find(x=>x.id===id);if(!r)return;
+ modal(`<button class="kxa-x" onclick="kxaClose()">×</button><h3 style="color:#B71C1C;font-weight:800;margin-bottom:6px">Reject ID card request</h3><p style="font-size:13px;color:#666;margin-bottom:8px">${esc(r.name||'')} will see the reason you choose.</p>${REASONS.map((t,i)=>`<label class="kxa-rd"><input type="radio" name="kxr" value="${i}"${i===0?' checked':''}><span>${t}</span></label>`).join('')}<textarea id="kxr-n" class="ad-in" rows="2" placeholder="Extra note (optional)" style="margin-top:8px"></textarea><div class="kxa-pa"><button class="kxb" id="kxr-go">Send rejection</button><button class="kxb" style="background:#777" onclick="kxaClose()">Cancel</button></div>`);
+ $('kxr-go').onclick=async()=>{const i=+(document.querySelector('input[name=kxr]:checked')||{value:0}).value,note=$('kxr-n').value.trim();if(i===REASONS.length-1&&!note)return toast('Please write the reason in the note box');
+  try{await updateDoc(doc(db,'cardRequests',id),{status:'rejected',rejectReason:REASONS[i],rejectNote:note.slice(0,300),reviewedAt:Date.now()});await updateDoc(doc(db,'users',r.uid),{cardApproved:false});kxaClose();toast('Rejected — reason sent to the member')}catch(e){toast('Failed: '+(e.code||e.message))}}};
+window.kxaCrRevoke=async id=>{const r=CR.find(x=>x.id===id);if(!r||!confirm('Take back the approved ID card?'))return;
+ try{await updateDoc(doc(db,'users',r.uid),{cardApproved:false});await updateDoc(doc(db,'cardRequests',id),{status:'rejected',rejectReason:'Approval withdrawn by admin',rejectNote:'',reviewedAt:Date.now()});toast('Approval withdrawn')}catch(e){toast('Failed: '+(e.code||e.message))}};
+
+/* ================= live data ================= */
+function start(){const w=(c,fn)=>{try{onSnapshot(collection(db,c),s=>fn(s.docs.map(d=>({id:d.id,...d.data()}))),e=>console.warn(c,e.code))}catch(e){}};
+ w('announcements',a=>{NT=a;NU.nb.paint();NU.na.paint()});
+ w('users',a=>{US=a;uStats();crPaint()});
+ w('team',a=>{TM=a;uStats()});
+ w('cardRequests',a=>{CR=a;crPaint()})}
+onAuthStateChanged(auth,u=>{if(u&&u.email&&!started){started=true;start()}});
+window.kxaView=v=>{if(v==='users')uStats();if(v==='cardreq')crPaint();if(v==='nbar')NU.nb.paint();if(v==='nall')NU.na.paint()};
+
+</script>
+<style>.spw{display:grid;grid-template-columns:320px 1fr;gap:12px;height:calc(100vh - 150px);min-height:480px}@media(max-width:820px){.spw{grid-template-columns:1fr;height:auto}.spl{max-height:260px}}
+.spl{background:#fff;border:1px solid #f3c4c4;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}.spl>input{border:0;border-bottom:1px solid #eee;padding:12px 14px;outline:0;font-size:14px}#sp-list{overflow:auto;flex:1}
+.spi{display:flex;gap:10px;align-items:center;padding:11px 12px;border-bottom:1px solid #f4f4f4;cursor:pointer}.spi:hover,.spi.on{background:#fff4f4}.spav{position:relative;width:42px;height:42px;border-radius:50%;background:#F8C4C4;color:#7f1d1d;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}.spav i{position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#16a34a;border:2px solid #fff}
+.spb{flex:1;min-width:0}.spb b{display:block;font-size:14px}.spb span{display:block;font-size:12.5px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.spb small{font-size:11px;color:#aaa}.spi em{background:#D32F2F;color:#fff;border-radius:11px;min-width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-style:normal;font-weight:800}
+.bd{background:#fee2e2;color:#991b1b;border-radius:6px;padding:0 6px;font-size:10.5px;text-decoration:none}.cl{background:#eee;color:#666;border-radius:6px;padding:0 6px;font-size:10.5px;text-decoration:none}
+.spc{background:#fff;border:1px solid #f3c4c4;border-radius:14px;display:flex;flex-direction:column;overflow:hidden;min-height:420px}.sp-empty{margin:auto;color:#999}
+.sph{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid #eee}.sph b{font-size:16px}.sph span{display:block;font-size:12.5px;color:#777}.spa{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.spa .kxb{padding:7px 12px;font-size:12.5px;margin:0}
+#sp-conn{padding:7px 14px;background:#f6fbf7;font-size:13px;color:#166534;border-bottom:1px solid #eee}#sp-conn i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+#sp-msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:7px;background:#F7F7F9}.spm{max-width:78%;padding:8px 12px;border-radius:14px;font-size:14px;word-break:break-word;box-shadow:0 1px 2px #0001}.spm b{display:block;font-size:11px;color:#B71C1C;margin-bottom:2px}.spm span{white-space:pre-wrap}.spm small{display:block;font-size:10.5px;opacity:.6;text-align:right;margin-top:2px}
+.spm.us{align-self:flex-start;background:#fff}.spm.bt{align-self:flex-start;background:#FFF7E8}.spm.me{align-self:flex-end;background:linear-gradient(135deg,#E53935,#B71C1C);color:#fff}.spm.me b{color:#ffd}.sps{align-self:center;background:#e6e6ea;color:#555;font-size:12px;padding:3px 12px;border-radius:11px}
+.spr{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;align-items:flex-end}.spr textarea{flex:1;margin:0;resize:none;max-height:120px}.spr .kxb{margin:0}
+</style>
+<script type="module">
+import {getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {getFirestore,collection,doc,addDoc,setDoc,updateDoc,onSnapshot,query,orderBy,increment} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const app=getApp(),auth=getAuth(app),db=getFirestore(app),$=i=>document.getElementById(i);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=m=>window.showToast?window.showToast(m):alert(m);
+const fdt=t=>t?new Date(t).toLocaleString([],{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'-';
+const tt=x=>String(x||'').split('|')[0];
+let SP=[],cur=null,MS=[],unMs=null,lastUnread=0,started=false;
+function beep(){try{const A=new (window.AudioContext||window.webkitAudioContext)(),o=A.createOscillator(),g=A.createGain();o.frequency.value=900;o.connect(g);g.connect(A.destination);g.gain.setValueAtTime(.0001,A.currentTime);g.gain.exponentialRampToValueAtTime(.15,A.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,A.currentTime+.35);o.start();o.stop(A.currentTime+.4)}catch(e){}}
+const isOn=u=>u&&u.online===true&&Date.now()-(u.lastSeenMs||0)<80000;
+
+/* ============ LIVE SUPPORT ============ */
+function paintList(){const el=$('sp-list');if(!el)return;const q=($('sp-q')||{value:''}).value.toLowerCase().trim();
+ const L=SP.filter(x=>x.hasUser).filter(x=>!q||[x.name,x.phone,x.email].some(v=>String(v||'').toLowerCase().includes(q))).sort((a,b)=>(b.lastAt||0)-(a.lastAt||0));
+ const un=SP.reduce((n,x)=>n+((x.hasUser&&x.unreadAdmin)?1:0),0),nb=$('nav-support-count');if(nb){nb.textContent=un;nb.classList.toggle('hidden',!un)}
+ el.innerHTML=L.map(x=>{const u=window.kxaGetUser&&window.kxaGetUser(x.id);return`<div class="spi${cur===x.id?' on':''}" onclick="kxspOpen('${esc(x.id)}')"><div class="spav">${esc(String(x.name||'?').charAt(0).toUpperCase())}${isOn(u)?'<i></i>':''}</div><div class="spb"><b>${esc(x.name||'Member')}${x.banned?' <u class="bd">BANNED</u>':''}${x.status==='closed'?' <u class="cl">closed</u>':''}</b><span>${esc(x.lastText||'')}</span><small>${fdt(x.lastAt)}</small></div>${x.unreadAdmin?`<em>${x.unreadAdmin}</em>`:''}</div>`}).join('')||'<div class="ad-empty">No conversations yet</div>'}
+window.kxspOpen=id=>{cur=id;if(unMs){unMs();unMs=null}MS=[];paintList();const t=SP.find(x=>x.id===id);if(!t)return;
+ updateDoc(doc(db,'support',id),{unreadAdmin:0}).catch(()=>{});
+ const box=$('sp-chat');box.innerHTML=`<div class="sph"><div><b id="sp-nm">${esc(t.name||'Member')}</b><span id="sp-sub"></span></div><div class="spa"><input id="sp-ag" class="ad-in" style="width:120px;padding:7px 10px" placeholder="Agent name" value="${esc(localStorage.getItem('kxagent')||'Admin')}"><button class="kxb" style="background:#555" onclick="kxaProfile('${esc(id)}')">Profile</button><button class="kxb" id="sp-ban" onclick="kxspBan()"></button><button class="kxb" style="background:#777" id="sp-cl" onclick="kxspClose()"></button><button class="kxb" style="background:#16a34a" onclick="kxspExport()">Export</button></div></div><div id="sp-conn"></div><div id="sp-msgs"></div><div class="spr"><label class="kxb" style="background:#555;margin:0;cursor:pointer" title="Send a photo"><i class="fa-regular fa-image"></i><input type="file" accept="image/*" hidden onchange="kxspImg(this)"></label><textarea id="sp-in2" rows="1" class="ad-in" placeholder="Type a reply... (Enter to send)"></textarea><button class="kxb" onclick="kxspSend()">Send</button></div>`;
+ $('sp-in2').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();kxspSend()}});
+ $('sp-ag').onchange=e=>localStorage.setItem('kxagent',e.target.value.trim()||'Admin');
+ unMs=onSnapshot(query(collection(db,'support',id,'messages'),orderBy('at')),s=>{MS=s.docs.map(d=>({id:d.id,...d.data()}));paintMsgs()},()=>{});paintHead()};
+function paintHead(){const t=SP.find(x=>x.id===cur);if(!t||!$('sp-sub'))return;const u=window.kxaGetUser&&window.kxaGetUser(cur),on=isOn(u);
+ $('sp-sub').textContent=[t.phone,t.email,t.agent?'Agent: '+t.agent:'No agent yet'].filter(Boolean).join(' · ');
+ $('sp-conn').innerHTML=`<i style="background:${on?'#16a34a':'#aaa'}"></i> Customer <b>${esc(t.name||'')}</b> ${on?'is connected right now':'is offline'}${t.banned?' · <u class="bd">account banned</u>':''}`;
+ const b=$('sp-ban');if(b){const bl=u&&u.blocked===true;b.textContent=bl?'Unban account':'Ban account';b.style.background=bl?'#16a34a':'#C62828'}
+ const c=$('sp-cl');if(c)c.textContent=t.status==='closed'?'Reopen':'Close chat'}
+function paintMsgs(){const el=$('sp-msgs');if(!el)return;const near=el.scrollHeight-el.scrollTop-el.clientHeight<140;
+ el.innerHTML=MS.map(m=>{const tm=fdt(m.at);if(m.from==='system')return`<div class="sps">${esc(tt(m.text))}</div>`;const a=m.from==='agent';return`<div class="spm ${a?'me':m.from==='bot'?'bt':'us'}"><b>${a?esc(m.agent||'Agent'):m.from==='bot'?'Bot':esc((SP.find(x=>x.id===cur)||{}).name||'Customer')}</b>${m.image?`<img class="sp-img" src="${esc(m.image)}" onclick="kxspZoom(this.src)" alt="">`:''}${(m.text||!m.image)?`<span>${esc(m.from==='bot'?tt(m.text):m.text)}</span>`:''}<small>${tm}</small></div>`}).join('');if(near)el.scrollTop=el.scrollHeight}
+window.kxspSend=async()=>{const t=SP.find(x=>x.id===cur),inp=$('sp-in2'),txt=inp.value.trim();if(!t||!txt)return;const name=($('sp-ag').value.trim()||'Admin');localStorage.setItem('kxagent',name);inp.value='';const at=Date.now();
+ try{if(!t.agent||t.agent!==name){await setDoc(doc(db,'support',cur),{agent:name},{merge:true});await addDoc(collection(db,'support',cur,'messages'),{from:'system',agent:name,text:`Agent ${name} has joined the chat 👋`,at:at-1})}
+  await addDoc(collection(db,'support',cur,'messages'),{from:'agent',agent:name,text:txt,at});await updateDoc(doc(db,'support',cur),{lastText:txt.slice(0,120),lastAt:at,unreadUser:increment(1),unreadAdmin:0,status:'open'})}catch(e){toast('Failed: '+(e.code||e.message))}};
+const shrinkImg=f=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.72))};i.onerror=()=>r('');i.src=fr.result};fr.onerror=()=>r('');fr.readAsDataURL(f)});
+window.kxspZoom=src=>{const z=document.createElement('div');z.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out';z.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:100%;border-radius:12px">';z.onclick=()=>z.remove();document.body.appendChild(z)};
+window.kxspImg=async el=>{const f=el.files[0];el.value='';const t=SP.find(x=>x.id===cur);if(!f||!t)return;const name=($('sp-ag').value.trim()||'Admin');const img=await shrinkImg(f);if(!img)return toast('Could not read this photo');const at=Date.now();
+ try{if(!t.agent||t.agent!==name){await setDoc(doc(db,'support',cur),{agent:name},{merge:true});await addDoc(collection(db,'support',cur,'messages'),{from:'system',agent:name,text:`Agent ${name} has joined the chat 👋`,at:at-1})}
+  await addDoc(collection(db,'support',cur,'messages'),{from:'agent',agent:name,text:'',image:img,at});await updateDoc(doc(db,'support',cur),{lastText:'📷 Photo',lastAt:at,unreadUser:increment(1),unreadAdmin:0,status:'open'})}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxspClose=async()=>{const t=SP.find(x=>x.id===cur);if(!t)return;const closed=t.status==='closed';try{await updateDoc(doc(db,'support',cur),{status:closed?'open':'closed',closedAt:closed?0:Date.now()});if(!closed)await addDoc(collection(db,'support',cur,'messages'),{from:'system',agent:'x',text:'This chat was closed by the agent. Send a message to open it again.',at:Date.now()});toast(closed?'Chat reopened':'Chat closed')}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxspBan=async()=>{const u=window.kxaGetUser&&window.kxaGetUser(cur);if(!u)return toast('Member not found');const bl=u.blocked===true;if(!confirm((bl?'Unban ':'Ban ')+(u.name||'this member')+'?'))return;try{await updateDoc(doc(db,'users',cur),{blocked:!bl});await addDoc(collection(db,'support',cur,'messages'),{from:'system',agent:'x',text:bl?'Your account has been unbanned. Welcome back!':'Your account has been banned by the admin.',at:Date.now()});await setDoc(doc(db,'support',cur),{banned:!bl},{merge:true});toast(bl?'Account unbanned':'Account banned')}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxspExport=()=>{const t=SP.find(x=>x.id===cur);if(!t)return;
+ const lines=['Live support chat','Customer: '+(t.name||''),'Phone: '+(t.phone||''),'Email: '+(t.email||''),'Exported: '+new Date().toLocaleString(),'-'.repeat(40)];
+ MS.forEach(m=>lines.push('['+new Date(m.at).toLocaleString()+'] '+(m.from==='agent'?'Agent '+(m.agent||''):m.from==='bot'?'Bot':m.from==='system'?'System':(t.name||'Customer'))+': '+(m.from==='bot'||m.from==='system'?tt(m.text):m.text)));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n')],{type:'text/plain;charset=utf-8'}));a.download='support-'+(t.name||cur).replace(/\W+/g,'_')+'-'+new Date().toISOString().slice(0,10)+'.txt';document.body.appendChild(a);a.click();a.remove();toast('Chat exported')};
+
+/* ============ MAINTENANCE MODE ============ */
+let mtLoaded=false,mtImg='';
+const compress=(f,w)=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,w/i.width),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.82))};i.onerror=()=>r('');i.src=fr.result};fr.readAsDataURL(f)});
+function mtPrev(){const p=$('mt-prev');if(p)p.innerHTML=mtImg?`<img src="${esc(mtImg)}" style="max-width:100%;max-height:180px;border-radius:12px">`:''}
+window.kxmtFile=async el=>{const f=el.files[0];if(!f)return;mtImg=await compress(f,1000);$('mt-url').value='';mtPrev()};
+window.kxmtUrl=v=>{v=v.trim();if(/^https?:\/\//i.test(v)){mtImg=v;mtPrev()}};
+window.kxmtSave=async on=>{const o={on:!!on,title:$('mt-title').value.trim(),message:$('mt-msg').value.trim(),image:mtImg,updatedAt:Date.now()};
+ if(on&&!confirm('Turn maintenance mode ON? Every user will be blocked from using the app until you turn it off.'))return;
+ try{await setDoc(doc(db,'settings','maintenance'),o,{merge:true});toast(on?'Maintenance mode is ON':'Saved - maintenance mode is OFF')}catch(e){toast('Failed: '+(e.code||e.message))}};
+window.kxmtOff=()=>kxmtSave(false);
+window.kxResetLogo=async()=>{if(!confirm('Remove the uploaded logo and use the default blood-drop logo?'))return;try{await setDoc(doc(db,'settings','site'),{logo:''},{merge:true});try{const s=JSON.parse(localStorage.getItem('kxsite')||'{}');delete s.logo;localStorage.setItem('kxsite',JSON.stringify(s))}catch(e){}toast('Default logo restored')}catch(e){toast('Failed: '+(e.code||e.message))}};
+function start(){
+ onSnapshot(collection(db,'support'),s=>{SP=s.docs.map(d=>({id:d.id,...d.data()}));const un=SP.reduce((n,x)=>n+(x.hasUser&&x.unreadAdmin?x.unreadAdmin:0),0);if(un>lastUnread&&started)beep();lastUnread=un;started=true;paintList();paintHead()},e=>console.warn('support',e.code));
+ onSnapshot(doc(db,'settings','maintenance'),d=>{const x=d.exists()?d.data():{};const st=$('mt-state');if(st){st.innerHTML=x.on?'<span class="kxa-p r">ON - users are blocked</span>':'<span class="kxa-p g">OFF - site is normal</span>'}
+  if(!mtLoaded&&$('mt-title')){mtLoaded=true;$('mt-title').value=x.title||'';$('mt-msg').value=x.message||'';mtImg=x.image||'';if(/^https?:/i.test(mtImg))$('mt-url').value=mtImg;mtPrev()}},()=>{})}
+onAuthStateChanged(auth,u=>{if(u&&u.email&&!window.__sp0){window.__sp0=1;start()}});
+window.kxspSearch=()=>paintList();
+const _v=window.kxaView;window.kxaView=v=>{_v&&_v(v);if(v==='support')paintList()};
+
+</script>
+<style id="kx-a-v2">
+.kxinfo{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,#FFF5F5,#FFEAEA);border:1px solid #F4C4C4;border-left:4px solid #D32F2F;border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.kxinfo>i{flex:none;width:38px;height:38px;border-radius:11px;background:#D32F2F;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.kxinfo b{display:block;font-size:14.5px;color:#7F1D1D}.kxinfo p{font-size:13px;color:#555;margin:2px 0 0!important;line-height:1.5}.kxinfo p em{font-style:normal;font-weight:800;color:#B71C1C}
+.kxw{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0 10px}.kxw b{font-size:11.5px;color:#B71C1C;text-transform:uppercase;letter-spacing:.3px;margin-right:2px}
+.kxw span{background:#FDE8E8;color:#7F1D1D;font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px}
+.kxa h3 i{margin-right:6px;color:#D32F2F}
+.kxpv{margin:6px 0 12px}.kxpv small{display:block;font-size:11.5px;font-weight:700;color:#999;margin-bottom:4px;text-transform:uppercase}
+.kxmq{display:flex;align-items:center;gap:10px;background:#FFF1F1;border:1.5px solid #E53935;border-radius:14px;padding:10px 12px;overflow:hidden;color:#B71C1C;font-weight:700;font-size:14px;white-space:nowrap}
+.kxmq i{flex:none;width:30px;height:30px;border-radius:50%;background:#C62828;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}.kxmq span{display:inline-block;animation:kxmqa 14s linear infinite;padding-left:100%}
+@keyframes kxmqa{to{transform:translateX(-100%)}}
+.nxbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.nxbar .ad-in{flex:1;min-width:200px;margin:0!important}
+.nxact{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.nxlist{max-height:460px;overflow:auto;border:1px solid #F3D3D3;border-radius:14px}
+.nxr{display:flex;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid #F7E6E6}.nxr:last-child{border-bottom:0}.nxr:hover{background:#FFF8F8}
+.nxr input[type=checkbox]{width:18px;height:18px;accent-color:#D32F2F;flex:none}
+.nxr .av{width:38px;height:38px;border-radius:50%;background:#F8C4C4;color:#7F1D1D;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}.nxr .av img{width:100%;height:100%;object-fit:cover}
+.nxr .nm{flex:1;min-width:0}.nxr .nm b{display:block;font-size:14px;color:#2b2b2b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nxr .nm span{font-size:12px;color:#888}
+.nxr .bd{background:#FDE2E2;color:#B71C1C;border-radius:8px;padding:1px 8px;font-size:11.5px;font-weight:800;flex:none}
+.nxr .kxb{margin:0;padding:7px 16px;font-size:13px}
+.nxh{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid #eee}.nxh:first-child{border-top:0}
+.nxh>div{flex:1;min-width:0}.nxh b{display:block;font-size:14px}.nxh span{display:block;font-size:12.5px;color:#666;white-space:pre-wrap;word-break:break-word}.nxh small{font-size:11px;color:#999}
+.nxh u{text-decoration:none;font-size:10.5px;font-weight:800;padding:1px 8px;border-radius:8px;background:#DCFCE7;color:#166534;margin-left:6px}.nxh u.all{background:#FDE2E2;color:#B71C1C}
+.kxlg{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.kxlg-p{width:110px;height:110px;border-radius:24px;border:1px dashed #E5B5B5;background:#FFF8F8;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none}.kxlg-p.round{border-radius:50%}.kxlg-p img{width:100%;height:100%;object-fit:contain}
+.kxmap-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.kxmap-g>div{background:#FFF5F5;border:1px solid #F4D2D2;border-radius:12px;padding:10px 12px}.kxmap-g i{color:#D32F2F;margin-bottom:4px;display:block}.kxmap-g b{display:block;font-size:13.5px;color:#7F1D1D}.kxmap-g span{font-size:12px;color:#777}
+.spm .sp-img{display:block;max-width:100%;width:220px;max-height:240px;object-fit:cover;border-radius:10px;margin:3px 0;cursor:zoom-in}
+</style>
+<script type="module">
+import {getApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {getFirestore,collection,doc,setDoc,addDoc,deleteDoc,onSnapshot,writeBatch} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const app=getApp(),auth=getAuth(app),db=getFirestore(app),$=i=>document.getElementById(i);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=m=>window.showToast?window.showToast(m):alert(m);
+const err=e=>'Failed: '+(e.code==='permission-denied'?'permission denied - publish the new firestore.rules (see README)':(e.code||e.message));
+const ms=v=>typeof v==='number'?v:(v&&v.seconds?v.seconds*1000:(v&&v.toDate?v.toDate().getTime():0));
+const fdt=t=>t?new Date(t).toLocaleString([],{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'-';
+const shrink=(f,w,q)=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,w/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL(f.type==='image/png'?'image/png':'image/jpeg',q))};i.onerror=()=>r('');i.src=fr.result};fr.onerror=()=>r('');fr.readAsDataURL(f)});
+
+/* ---------- explain every section ---------- */
+const INFO={
+ dash:['fa-chart-pie','Dashboard','A live summary of members, requests and donations.','Only you see this page.'],
+ nbar:['fa-bullhorn','Notice bar','The single moving line of text on every member\'s Home page.','Home page → red moving bar under the header.'],
+ nall:['fa-bell','Send notification','Send a message to one member, some members, or everyone.','Member app → the 🔔 bell at the top of Home (and an optional pop-up).'],
+ banners:['fa-images','Slider banners','Pictures that slide automatically at the top of the Home page (up to 6).','Home page → big slider.'],
+ team:['fa-user-shield','Community','The people listed as your team / volunteers.','Home page → "Our Team" list.'],
+ reqs:['fa-droplet','Urgent requests','Blood requests posted by members. Close or remove any request.','Home → Urgent, and the Requests feed.'],
+ dons:['fa-hand-holding-droplet','Donations','Record a completed donation. This raises the donor\'s count.','Donor profile count · unlocks the ID card after 2 donations.'],
+ users:['fa-users','Members','All registered donors and receivers. View a profile, ban, unban or remove.','Members\' accounts and Search page.'],
+ cardreq:['fa-id-card','ID card requests','Members with fewer than 2 donations can ask you to unlock their ID card.','Member app → Profile → ID card.'],
+ support:['fa-headset','Live support','Real-time chat with members. Reply with text or photos, close chats, export or ban.','Member app → the red headset button.'],
+ reports:['fa-flag','Reports','Reports members sent about requests or donors.','Only you see this page.'],
+ maint:['fa-screwdriver-wrench','Maintenance mode','Turn ON to block everyone with an "update in progress" screen. Turn OFF when finished.','Whole website and app.'],
+ site:['fa-gear','Site settings','Logo, name, support look, welcome pop-up, entry pop-ups and ID card signatures. Each card says where it shows.','See each card.'],
+ live:['fa-tower-broadcast','Live activity','New members, requests and donations as they happen.','Only you see this page.'],
+ chats:['fa-comments','Chats & Online','Who is online now and all member-to-member conversations.','Only you see this page.']};
+const mk=(k,v)=>`<div class="kxinfo"><i class="fa-solid ${v[0]}"></i><div><b>${v[1]}</b><p>${v[2]}</p><p><em>Where members see it:</em> ${v[3]}</p></div></div>`;
+function injectInfo(){Object.entries(INFO).forEach(([k,v])=>{const s=$('view-'+k);if(s&&!s.querySelector(':scope > .kxinfo'))s.insertAdjacentHTML('afterbegin',mk(k,v))})}
+injectInfo();
+const _kv=window.kxaView;window.kxaView=v=>{_kv&&_kv(v);injectInfo()};
+
+/* ---------- notice bar ---------- */
+let nbInit=false;
+window.kxNbPv=()=>{const t=($('nbx-t').value||'').trim()||($('nbx-b').value||'').trim();$('nbx-pv').textContent=t?'📢 '+t:'(nothing - members will see the default welcome line)'};
+window.kxNbSave=async()=>{const text=$('nbx-t').value.trim(),textBn=$('nbx-b').value.trim();try{await setDoc(doc(db,'settings','noticebar'),{text,textBn,updatedAt:Date.now()},{merge:true});$('nbx-st').textContent='Saved '+fdt(Date.now());toast('Notice bar saved')}catch(e){toast(err(e))}};
+window.kxNbClear=async()=>{if(!confirm('Clear the notice bar message?'))return;$('nbx-t').value='';$('nbx-b').value='';await kxNbSave();kxNbPv()};
+
+/* ---------- send notification ---------- */
+let US=[],NH=[],SEL=new Set(),sentStats='';
+const vis=()=>{const q=($('nx-q')&&$('nx-q').value||'').toLowerCase().trim();return US.filter(u=>!q||[u.name,u.phone,u.blood,u.district,u.email].some(v=>String(v||'').toLowerCase().includes(q)))};
+window.kxNxPaint=()=>{const el=$('nx-list');if(!el)return;const L=vis();
+ el.innerHTML=L.map(u=>`<div class="nxr"><input type="checkbox" ${SEL.has(u.id)?'checked':''} onchange="kxNxTog('${esc(u.id)}',this.checked)"><div class="av">${u.cardPhoto||u.photoURL?`<img src="${esc(u.cardPhoto||u.photoURL)}" alt="" onerror="this.remove()">`:esc(String(u.name||'?').charAt(0).toUpperCase())}</div><div class="nm"><b>${esc(u.name||'No name')}</b><span>${esc(u.district||'-')} · ${esc(u.phone||u.email||'')}</span></div><span class="bd">${esc(u.blood||'-')}</span><button class="kxb" onclick="kxNxSend('one','${esc(u.id)}')">Send</button></div>`).join('')||'<div class="ad-empty" style="padding:20px">No members found</div>';
+ $('nx-n').textContent=SEL.size;const a=$('nx-all');if(a)a.checked=L.length>0&&L.every(u=>SEL.has(u.id))};
+window.kxNxTog=(id,on)=>{on?SEL.add(id):SEL.delete(id);$('nx-n').textContent=SEL.size;const L=vis();$('nx-all').checked=L.length>0&&L.every(u=>SEL.has(u.id))};
+window.kxNxAll=on=>{vis().forEach(u=>on?SEL.add(u.id):SEL.delete(u.id));kxNxPaint()};
+const form=()=>({title:$('nx-t').value.trim(),body:$('nx-b').value.trim(),titleBn:$('nx-tb').value.trim(),bodyBn:$('nx-bb').value.trim(),popup:$('nx-pop').checked});
+window.kxNxSend=async(mode,uid)=>{const f=form();if(!f.title&&!f.body)return toast('Write a title or a message first (Step 1)');
+ const base={...f,createdAt:Date.now(),by:'admin'};
+ try{
+  if(mode==='all'||(mode==='selected'&&SEL.size&&SEL.size===US.length)){if(!confirm('Send this notification to ALL '+US.length+' members?'))return;await addDoc(collection(db,'notifications'),{...base,to:'all'});toast('Sent to all members')}
+  else if(mode==='one'){const u=US.find(x=>x.id===uid);await addDoc(collection(db,'notifications'),{...base,to:uid,toName:u?u.name||'':''});toast('Sent to '+(u&&u.name||'member'))}
+  else{if(!SEL.size)return toast('Tick at least one member first');if(!confirm('Send this notification to '+SEL.size+' selected member(s)?'))return;
+   const ids=[...SEL];for(let i=0;i<ids.length;i+=400){const b=writeBatch(db);ids.slice(i,i+400).forEach(id=>{const u=US.find(x=>x.id===id);b.set(doc(collection(db,'notifications')),{...base,to:id,toName:u?u.name||'':''})});await b.commit()}toast('Sent to '+ids.length+' member(s)')}
+  if(mode!=='one'){['nx-t','nx-b','nx-tb','nx-bb'].forEach(i=>$(i).value='');$('nx-pop').checked=false;SEL.clear();kxNxPaint()}
+ }catch(e){toast(err(e))}};
+function paintHist(){const el=$('nx-hist');if(!el)return;const L=[...NH].sort((a,b)=>ms(b.createdAt)-ms(a.createdAt)).slice(0,40);
+ el.innerHTML=L.map(n=>{const all=n.to==='all',u=US.find(x=>x.id===n.to);return`<div class="nxh"><div><b>${esc(n.title||'(no title)')}<u class="${all?'all':''}">${all?'ALL MEMBERS':esc((u&&u.name)||n.toName||'One member')}</u>${n.popup?'<u class="all" style="background:#FEF3C7;color:#92400E">POP-UP</u>':''}</b>${n.body?`<span>${esc(n.body)}</span>`:''}<small>${fdt(ms(n.createdAt))}</small></div><button class="ad-ib dg" title="Delete" onclick="kxNxDel('${esc(n.id)}')"><i class="fa-solid fa-trash"></i></button></div>`}).join('')||'<div class="ad-empty">Nothing sent yet</div>'}
+window.kxNxDel=async id=>{if(!confirm('Delete this notification for everyone who got it?'))return;try{await deleteDoc(doc(db,'notifications',id));toast('Deleted')}catch(e){toast(err(e))}};
+
+/* ---------- live member counts for the public landing page ---------- */
+let stT=null;
+function syncStats(){clearTimeout(stT);stT=setTimeout(async()=>{const d=US.filter(u=>u.role==='donor').length,r=US.filter(u=>u.role==='receiver').length,key=US.length+'|'+d+'|'+r;if(key===sentStats)return;try{await setDoc(doc(db,'stats','public'),{total:US.length,donors:d,receivers:r,updatedAt:Date.now()},{merge:true});sentStats=key}catch(e){console.warn('stats',e.code)}},2500)}
+
+/* ---------- site settings ---------- */
+let siteFilled=false,SITEv={};
+window.kxLogoPick=(inp,prev)=>{const f=inp.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{$(prev).src=fr.result};fr.readAsDataURL(f)};
+window.kxSaveLogo=async(field,inputId)=>{const f=$(inputId).files[0];if(!f)return toast('Choose a picture first');const d=await shrink(f,field==='logo'?320:256,.92);if(!d)return toast('Could not read this picture');try{await setDoc(doc(db,'settings','site'),{[field]:d},{merge:true});$(inputId).value='';toast('Saved - members see it now')}catch(e){toast(err(e))}};
+window.kxRemoveLogo=async field=>{if(!confirm(field==='logo'?'Remove your logo and use the default blood-drop logo?':'Remove the support picture? The website logo will be used.'))return;try{await setDoc(doc(db,'settings','site'),{[field]:''},{merge:true});try{const s=JSON.parse(localStorage.getItem('kxsite')||'{}');delete s[field];localStorage.setItem('kxsite',JSON.stringify(s))}catch(e){}toast(field==='logo'?'Default logo restored':'Using website logo')}catch(e){toast(err(e))}};
+window.kxSaveName=async()=>{try{await setDoc(doc(db,'settings','site'),{name:$('ks-name').value.trim(),domain:$('ks-dom').value.trim()},{merge:true});toast('Name & address saved')}catch(e){toast(err(e))}};
+window.kxSaveSupport=async()=>{try{await setDoc(doc(db,'settings','site'),{supportName:$('ss-name').value.trim(),supportTag:$('ss-tag').value.trim()},{merge:true});toast('Support text saved')}catch(e){toast(err(e))}};
+window.kxSaveWelcome=async()=>{try{await setDoc(doc(db,'settings','site'),{welcomeOn:$('ws-on').checked,welcomeTitle:$('ws-t').value.trim(),welcomeBody:$('ws-b').value.trim(),welcomeTitleBn:$('ws-tb').value.trim(),welcomeBodyBn:$('ws-bb').value.trim()},{merge:true});toast('Welcome pop-up saved')}catch(e){toast(err(e))}};
+function paintSite(){const d=SITEv,L=window.LOGO_SRC;
+ if($('ks-prev'))$('ks-prev').src=d.logo||L;if($('ss-prev'))$('ss-prev').src=d.supportLogo||d.logo||L;
+ if(!siteFilled&&$('ss-name')){siteFilled=true;$('ss-name').value=d.supportName||'';$('ss-tag').value=d.supportTag||'';$('ws-on').checked=d.welcomeOn!==false;$('ws-t').value=d.welcomeTitle||'';$('ws-b').value=d.welcomeBody||'';$('ws-tb').value=d.welcomeTitleBn||'';$('ws-bb').value=d.welcomeBodyBn||'';$('ks-name').value=d.name||'';$('ks-dom').value=d.domain||''}}
+
+let started=false;
+function start(){
+ onSnapshot(doc(db,'settings','noticebar'),d=>{const x=d.exists()?d.data():{};if(!nbInit||document.activeElement!==$('nbx-t')&&document.activeElement!==$('nbx-b')){nbInit=true;$('nbx-t').value=x.text||'';$('nbx-b').value=x.textBn||'';kxNbPv();if(x.updatedAt)$('nbx-st').textContent='Last saved '+fdt(x.updatedAt)}},e=>console.warn(e.code));
+ onSnapshot(collection(db,'users'),s=>{US=s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>u.email!=='admin@kapilmuni.app').sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));kxNxPaint();paintHist();syncStats()},e=>console.warn(e.code));
+ onSnapshot(collection(db,'notifications'),s=>{NH=s.docs.map(d=>({id:d.id,...d.data()}));paintHist()},e=>console.warn(e.code));
+ onSnapshot(doc(db,'settings','site'),d=>{SITEv=d.exists()?d.data():{};paintSite()},e=>console.warn(e.code))}
+onAuthStateChanged(auth,u=>{if(u&&u.email&&!started){started=true;start()}});
+</script>
+</body>
+</html>
